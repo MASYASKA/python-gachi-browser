@@ -37,6 +37,7 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.view = parent
         self.widget = QtWidgets.QWidget()
         self.widget.ui = ui_class()
+        self.widget.scene = self
         self.widget.ui.panel = graphics.PanelHoldButton(self.widget, self)
         self.widget.ui.setupUi(self.widget)
         self.addWidget(self.widget)
@@ -51,7 +52,7 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.widget.ui.button_scale.clicked.connect(self.view.showMiximazed)
 
     def button_sex_handler(self):
-        if self.search_site:
+        if self.widget.ui.button_searchCondition.search_site:
             self.page.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
         else:
             self.page.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))

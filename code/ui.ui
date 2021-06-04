@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Main</class>
+ <widget class="QWidget" name="Main">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -161,34 +161,6 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_searchBackground">
-   <property name="geometry">
-    <rect>
-     <x>-1</x>
-     <y>29</y>
-     <width>1090</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QLabel{
-	background-color: rgb(167, 229, 255);
-}</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <zorder>label_searchBackground</zorder>
-  <zorder>edit_searchLine</zorder>
-  <zorder>button_back</zorder>
-  <zorder>button_forward</zorder>
-  <zorder>button_refresh</zorder>
-  <zorder>button_sex</zorder>
-  <zorder>button_close</zorder>
-  <zorder>button_scale</zorder>
-  <zorder>button_roll</zorder>
-  <zorder>button_searchCondition</zorder>
  </widget>
  <resources/>
  <connections/>
