@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
-import sys, graphics
+import sys; sys.path += ['E://0//git//python-gachi-browser//code//help']
+import graphics
 
 class MainView(QtWidgets.QGraphicsView):
 
@@ -67,5 +68,6 @@ class MyView(MainView):
 app = QtWidgets.QApplication(sys.argv)
 view = MyView()
 view.show()
+print(sys.path)
 
 sys.exit(app.exec_())
