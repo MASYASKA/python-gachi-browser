@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
-import sys, ui_class
+import sys, graphics
 
 class MainView(QtWidgets.QGraphicsView):
 
@@ -8,9 +8,19 @@ class MainView(QtWidgets.QGraphicsView):
         self.width, self.height = 1080, 720
         self.setGeometry(250, 250, self.width, self.height)
         self.setWindowTitle('Gachi Browser')
-        self.scene = MainScene(self, ui_class.Ui_Form)
+        self.scene = MainScene(self, graphics.Ui_Main)
         self.setScene(self.scene)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.maximized = False
+        self.setSizePolicy(QtWidgets.QSizePolicy().horizontalPolicy(), QtWidgets.QSizePolicy().verticalPolicy())
+
+    def showMiximazed(self):
+        if self.maximized:
+            self.setGeometry(250, 250, self.width, self.height)
+            self.maximized = False
+        else:
+            # self.
+            self.maximized = True
 
 class MyEngineView(QtWebEngineWidgets.QWebEngineView):
 
@@ -27,6 +37,7 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.view = parent
         self.widget = QtWidgets.QWidget()
         self.widget.ui = ui_class()
+        self.widget.ui.panel = graphics.PanelHoldButton(self.widget, self)
         self.widget.ui.setupUi(self.widget)
         self.addWidget(self.widget)
         self.page = MyEngineView()
@@ -35,9 +46,15 @@ class MainScene(QtWidgets.QGraphicsScene):
 
     def connecting(self):
         self.widget.ui.button_sex.clicked.connect(self.button_sex_handler)
+        self.widget.ui.button_close.clicked.connect(self.view.close)
+        self.widget.ui.button_roll.clicked.connect(self.view.showMinimized)
+        self.widget.ui.button_scale.clicked.connect(self.view.showMiximazed)
 
     def button_sex_handler(self):
-        self.page.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
+        if self.search_site:
+            self.page.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
+        else:
+            self.page.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
 
 
 class MyView(MainView):

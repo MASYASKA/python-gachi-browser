@@ -44,14 +44,6 @@ class Ui_Form(object):
         font.setPointSize(10)
         self.button_sex.setFont(font)
         self.button_sex.setObjectName("button_sex")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(-1, -1, 1090, 30))
-        self.label.setStyleSheet("QLabel{\n"
-"    \n"
-"    background-color: rgb(167, 229, 255);\n"
-"}")
-        self.label.setText("")
-        self.label.setObjectName("label")
         self.button_close = QtWidgets.QPushButton(Form)
         self.button_close.setGeometry(QtCore.QRect(1050, 4, 18, 18))
         self.button_close.setStyleSheet("QPushButton{\n"
@@ -69,14 +61,14 @@ class Ui_Form(object):
 "}")
         self.button_scale.setText("")
         self.button_scale.setObjectName("button_scale")
-        self.button_scale_2 = QtWidgets.QPushButton(Form)
-        self.button_scale_2.setGeometry(QtCore.QRect(1004, 4, 18, 18))
-        self.button_scale_2.setStyleSheet("QPushButton{\n"
+        self.button_roll = QtWidgets.QPushButton(Form)
+        self.button_roll.setGeometry(QtCore.QRect(1004, 4, 18, 18))
+        self.button_roll.setStyleSheet("QPushButton{\n"
 "    border-radius:9px;\n"
 "    background-color: rgb(43, 255, 6);\n"
 "}")
-        self.button_scale_2.setText("")
-        self.button_scale_2.setObjectName("button_scale_2")
+        self.button_roll.setText("")
+        self.button_roll.setObjectName("button_roll")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
