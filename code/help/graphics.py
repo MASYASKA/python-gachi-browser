@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
 from ui_class import Ui_Main as Ui_Main_old
 from ui_class import *
 
@@ -6,6 +6,7 @@ from ui_class import *
 class Ui_Main(Ui_Main_old):
     
     def setupUi(self, Main):
+        self.label_panel = PanelHoldButton(Main, Main.scene)
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
         font = QtGui.QFont()
@@ -24,6 +25,14 @@ class Ui_Main(Ui_Main_old):
         else:
             self.button_searchCondition.search_site = True
             self.button_searchCondition.setText('🌏')
+
+    def setUiSize(self, width, height):
+        self.edit_searchLine.setGeometry(94, 32, width-200, 18)
+        self.button_sex.setGeometry(width-80, 31, 30, 20)
+        self.button_searchCondition.setGeometry(width-38, 31, 30, 20)
+        self.button_close.setGeometry(width-30, 4, 18, 18)
+        self.button_scale.setGeometry(width-53, 4, 18, 18)
+        self.button_roll.setGeometry(width-76, 4, 18, 18)
 
 class SearchLineEdit(QtWidgets.QLineEdit):
 
@@ -53,3 +62,11 @@ class PanelHoldButton(QtWidgets.QLabel):
 
     def mouseMoveEvent(self, event):
         self.scene.view.move(event.globalPos() - self.mp)
+
+
+class MyEngineView(QtWebEngineWidgets.QWebEngineView):
+
+    def __init__(self):
+        super(MyEngineView, self).__init__()
+        self.setGeometry(0, 54, 1080, 666)
+        self.load(QtCore.QUrl('https://www.google.com/'))

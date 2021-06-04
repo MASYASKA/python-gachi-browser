@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
+from PyQt5 import QtWidgets, QtGui, QtCore
 import sys; sys.path += ['E://0//git//python-gachi-browser//code//help']
 import graphics
 
@@ -13,22 +13,21 @@ class MainView(QtWidgets.QGraphicsView):
         self.setScene(self.scene)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.maximized = False
-        self.setSizePolicy(QtWidgets.QSizePolicy().horizontalPolicy(), QtWidgets.QSizePolicy().verticalPolicy())
 
     def showMiximazed(self):
         if self.maximized:
             self.setGeometry(250, 250, self.width, self.height)
+            self.scene.widget.ui.setUiSize(self.width, self.height)
+            self.scene.setSceneRect(0, 0, self.width, self.height)
+            self.setScene(self.scene)
             self.maximized = False
         else:
-            # self.
+            self.setGeometry(0, 0, 1920, 1080)
+            self.scene.widget.ui.setUiSize(1920, 1080)
+            self.scene.widget.setGeometry(0, 0, 1920, 1080)
+            self.scene.setSceneRect(0, 0, 1920-2, 1080-2)
+            self.setScene(self.scene)
             self.maximized = True
-
-class MyEngineView(QtWebEngineWidgets.QWebEngineView):
-
-    def __init__(self):
-        super(MyEngineView, self).__init__()
-        self.setGeometry(0, 54, 1080, 666)
-        self.load(QtCore.QUrl('https://www.google.com/'))
 
 class MainScene(QtWidgets.QGraphicsScene):
 
@@ -39,10 +38,9 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.widget = QtWidgets.QWidget()
         self.widget.ui = ui_class()
         self.widget.scene = self
-        self.widget.ui.panel = graphics.PanelHoldButton(self.widget, self)
         self.widget.ui.setupUi(self.widget)
         self.addWidget(self.widget)
-        self.page = MyEngineView()
+        self.page = graphics.MyEngineView()
         self.addWidget(self.page)
         self.connecting()
 
@@ -68,6 +66,5 @@ class MyView(MainView):
 app = QtWidgets.QApplication(sys.argv)
 view = MyView()
 view.show()
-print(sys.path)
 
 sys.exit(app.exec_())
