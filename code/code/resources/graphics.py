@@ -1,16 +1,19 @@
-from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
+from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets, QtTest
 from ui_class import Ui_Main as Ui_Main_old
 from ui_class import *
-import sys; sys.path += ['E://0//git//python-gachi-browser//code//help']
+import sys; sys.path += ['E://0//git//python-gachi-browser//code//code//resources']
 
 
 class Ui_Main(Ui_Main_old):
     
     def setupUi(self, Main):
         self.label_panel = PanelHoldButton(Main, Main.scene)
-        # self.button_back = Arrow(Main, 'left_arrow.png', 2, 31)
-        # self.button_forward = Arrow(Main, 'right_arrow.png', 30, 31)
-        # self.button_refresh = Arrow(Main, 'arrow_reload', 57, 30)
+        self.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
+        self.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
+        self.button_refresh = PushedLabel(Main, 'resources//images//arrow_reload.png', 57, 30, 28, 20)
+        self.button_close = PushedLabel(Main, 'resources//images//cross.png', 1052, 4, 20, 20)
+        self.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
+        self.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
         font = QtGui.QFont()
@@ -35,9 +38,9 @@ class Ui_Main(Ui_Main_old):
         self.edit_searchLine.setGeometry(94, 32, width-200, 18)
         self.button_sex.setGeometry(width-80, 31, 30, 20)
         self.button_searchCondition.setGeometry(width-38, 31, 30, 20)
-        self.button_close.setGeometry(width-30, 4, 18, 18)
-        self.button_scale.setGeometry(width-53, 4, 18, 18)
-        self.button_roll.setGeometry(width-76, 4, 18, 18)
+        self.button_close.setGeometry(width-30, 4, 20, 20)
+        self.button_scale.setGeometry(width-53, 4, 20, 20)
+        self.button_roll.setGeometry(width-76, 4, 20, 20)
         self.label_panel.setGeometry(0, 0, width+10, 55)
         self.engine.setGeometry(0, 54, width, height-55)
 
@@ -79,9 +82,18 @@ class MyEngineView(QtWebEngineWidgets.QWebEngineView):
         self.load(QtCore.QUrl('https://www.google.com/'))
         # print(self.page().Reload())
 
-class Arrow(QtWidgets.QLabel, QtWidgets.QPushButton):
+class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
 
-    def __init__(self, parent, pixmap, x, y):
-        super(Arrow, self).__init__(parent=parent)
+    clicked = QtCore.pyqtSignal()
+
+    def __init__(self, parent, pixmap, x, y, width, height):
+        super(PushedLabel, self).__init__(parent=parent)
+        self.x, self.y, self.width, self.height = x, y, width, height
         self.setPixmap(QtGui.QPixmap(pixmap))
-        self.setGeometry(x, y, 28, 20)
+        self.setGeometry(x, y, width, height)
+
+    def mousePressEvent(self, event):
+        self.clicked.emit()
+        self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
+        QtTest.QTest.qWait(100)
+        self.setGeometry(self.x, self.y, self.width, self.height)
