@@ -15,6 +15,9 @@ class Ui_Main(object):
     def setupUi(self, Main):
         Main.setObjectName("Main")
         Main.resize(1080, 720)
+        self.edit_searchLine = QtWidgets.QLineEdit(Main)
+        self.edit_searchLine.setGeometry(QtCore.QRect(94, 32, 900, 18))
+        self.edit_searchLine.setObjectName("edit_searchLine")
         self.button_back = QtWidgets.QPushButton(Main)
         self.button_back.setGeometry(QtCore.QRect(0, 31, 28, 20))
         self.button_back.setObjectName("button_back")

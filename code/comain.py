@@ -18,7 +18,7 @@ class MainView(QtWidgets.QGraphicsView):
         if self.maximized:
             self.setGeometry(250, 250, self.width, self.height)
             self.scene.widget.ui.setUiSize(self.width, self.height)
-            self.scene.setSceneRect(0, 0, self.width, self.height)
+            self.scene.setSceneRect(0, 0, self.width-2, self.height-2)
             self.setScene(self.scene)
             self.maximized = False
         else:
@@ -40,8 +40,6 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.widget.scene = self
         self.widget.ui.setupUi(self.widget)
         self.addWidget(self.widget)
-        self.page = graphics.MyEngineView()
-        self.addWidget(self.page)
         self.connecting()
 
     def connecting(self):
@@ -49,22 +47,20 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.widget.ui.button_close.clicked.connect(self.view.close)
         self.widget.ui.button_roll.clicked.connect(self.view.showMinimized)
         self.widget.ui.button_scale.clicked.connect(self.view.showMiximazed)
+        self.widget.ui.button_refresh.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Reload).trigger)
+        self.widget.ui.button_back.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Back).trigger)
+        self.widget.ui.button_forward.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Forward).trigger)
 
     def button_sex_handler(self):
         if self.widget.ui.button_searchCondition.search_site:
-            self.page.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
+            self.widget.ui.engine.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
         else:
-            self.page.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
+            self.widget.ui.engine.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
 
-
-class MyView(MainView):
-
-    def __init__(self):
-        super(MyView, self).__init__()
 
 
 app = QtWidgets.QApplication(sys.argv)
-view = MyView()
+view = MainView()
 view.show()
 
 sys.exit(app.exec_())

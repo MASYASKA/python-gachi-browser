@@ -1,12 +1,16 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets
 from ui_class import Ui_Main as Ui_Main_old
 from ui_class import *
+import sys; sys.path += ['E://0//git//python-gachi-browser//code//help']
 
 
 class Ui_Main(Ui_Main_old):
     
     def setupUi(self, Main):
         self.label_panel = PanelHoldButton(Main, Main.scene)
+        # self.button_back = Arrow(Main, 'left_arrow.png', 2, 31)
+        # self.button_forward = Arrow(Main, 'right_arrow.png', 30, 31)
+        # self.button_refresh = Arrow(Main, 'arrow_reload', 57, 30)
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
         font = QtGui.QFont()
@@ -17,6 +21,7 @@ class Ui_Main(Ui_Main_old):
         self.edit_searchLine = SearchLineEdit(Main)
         self.edit_searchLine.setGeometry(QtCore.QRect(94, 32, 900, 18))
         self.edit_searchLine.setObjectName("edit_searchLine")
+        self.engine = MyEngineView(Main)
 
     def changeCondition(self):
         if self.button_searchCondition.search_site:
@@ -33,6 +38,8 @@ class Ui_Main(Ui_Main_old):
         self.button_close.setGeometry(width-30, 4, 18, 18)
         self.button_scale.setGeometry(width-53, 4, 18, 18)
         self.button_roll.setGeometry(width-76, 4, 18, 18)
+        self.label_panel.setGeometry(0, 0, width+10, 55)
+        self.engine.setGeometry(0, 54, width, height-55)
 
 class SearchLineEdit(QtWidgets.QLineEdit):
 
@@ -66,7 +73,15 @@ class PanelHoldButton(QtWidgets.QLabel):
 
 class MyEngineView(QtWebEngineWidgets.QWebEngineView):
 
-    def __init__(self):
-        super(MyEngineView, self).__init__()
+    def __init__(self, parent):
+        super(MyEngineView, self).__init__(parent=parent)
         self.setGeometry(0, 54, 1080, 666)
         self.load(QtCore.QUrl('https://www.google.com/'))
+        # print(self.page().Reload())
+
+class Arrow(QtWidgets.QLabel, QtWidgets.QPushButton):
+
+    def __init__(self, parent, pixmap, x, y):
+        super(Arrow, self).__init__(parent=parent)
+        self.setPixmap(QtGui.QPixmap(pixmap))
+        self.setGeometry(x, y, 28, 20)
