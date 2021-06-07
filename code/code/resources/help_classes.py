@@ -40,8 +40,9 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.current_tab = tab
 
     def closeTab(self):
-        tab = self.current_tab
+        tab = self.sender().parent
         del self.__dict__[tab.id]
+        tab.deleteLater()
         self.tab_count -= 1
 
     # helper functions
@@ -93,15 +94,16 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
 
     def __init__(self, parent, pixmap, x, y, width, height):
         super(PushedLabel, self).__init__(parent=parent)
+        self.parent = parent
         self.x, self.y, self.width, self.height = x, y, width, height
         self.setPixmap(QtGui.QPixmap(pixmap))
         self.setGeometry(x, y, width, height)
 
     def mousePressEvent(self, event):
-        self.clicked.emit()
         self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
         QtTest.QTest.qWait(100)
         self.setGeometry(self.x, self.y, self.width, self.height)
+        self.clicked.emit()
 
 
 class PanelTab(QtWidgets.QLabel):
