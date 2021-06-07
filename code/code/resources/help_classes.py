@@ -14,10 +14,10 @@ class SearchLineEdit(QtWidgets.QLineEdit):
             super(SearchLineEdit, self).keyPressEvent(event)
 
 
-class PanelHoldButton(QtWidgets.QLabel):
+class PanelHoldLabel(QtWidgets.QLabel):
 
     def __init__(self, parent, scene):
-        super(PanelHoldButton, self).__init__(parent=parent)
+        super(PanelHoldLabel, self).__init__(parent=parent)
         self.scene = scene
         self.setGeometry(-1, -1, 1090, 55)
         self.setStyleSheet("QLabel{\n"
@@ -29,15 +29,20 @@ class PanelHoldButton(QtWidgets.QLabel):
 
     def addTab(self, url='https://www.google.com/'):
         scene = PageScene(self.view_current_page, url)
-        tab = PanelTab(self, scene)
-        tab.id = f'tab_{self.tab_count}'
+        self.__dict__[f'tab_{self.tab_count}'] = 'loading...'
+        tab = PanelTab(self, scene, self.tab_count)
         self.__dict__[tab.id] = tab
         self.tab_count += 1
-        self.openTab(tab.id)
+        self.openTab(tab)
+
+    def openTab(self, tab):
+        self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
 
-    def openTab(self, tab_id):
-        self.view_current_page.setScene(self.__dict__[tab_id].scene)
+    def closeTab(self):
+        tab = self.current_tab
+        del self.__dict__[tab.id]
+        self.tab_count -= 1
 
     # helper functions
 
@@ -45,7 +50,10 @@ class PanelHoldButton(QtWidgets.QLabel):
         self.mp = event.globalPos() - self.scene.view.pos()
 
     def mouseMoveEvent(self, event):
-        self.scene.view.move(event.globalPos() - self.mp)
+        try:
+            self.scene.view.move(event.globalPos() - self.mp)
+        except:
+            pass
 
 
 class PageScene(QtWidgets.QGraphicsScene):
@@ -98,11 +106,23 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
 
 class PanelTab(QtWidgets.QLabel):
 
-    def __init__(self, parent, scene):
+    def __init__(self, parent, scene, count):
         super(PanelTab, self).__init__(parent=parent)
+        self.id = f'tab_{count}'
         self.scene = scene
-        self.setGeometry(0, 0, 95, 25)
-        self.setStyleSheet(r"QLabel{ background-color : black}")
+        self.parent = parent
+        if count > 0: self.x = 95*count + 1
+        else: self.x = 0
+        self.y = 0
+        self.setGeometry(self.x, self.y, 95, 25)
+        self.setStyleSheet(r"QLabel{ background-color : white}")
+        self.button_close = PushedLabel(self, "resources//images//button_tab_close.png", 70, 0, 25, 25)
+        self.button_close.clicked.connect(self.parent.closeTab)
+
+
+    def mousePressEvent(self, event):
+        self.parent.openTab(self)
+
 
 
 class ViewMainPage(QtWidgets.QGraphicsView):

@@ -47,15 +47,12 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.widget.ui.button_close.clicked.connect(self.view.close)
         self.widget.ui.button_roll.clicked.connect(self.view.showMinimized)
         self.widget.ui.button_scale.clicked.connect(self.view.showMiximazed)
-        # self.widget.ui.button_refresh.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Reload).trigger)
-        # self.widget.ui.button_back.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Back).trigger)
-        # self.widget.ui.button_forward.clicked.connect(self.widget.ui.engine.page().action(self.widget.ui.engine.page().Forward).trigger)
 
     def button_sex_handler(self):
         if self.widget.ui.button_searchCondition.search_site:
-            self.widget.ui.engine.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
+            self.widget.ui.label_panel.current_tab.scene.engine.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
         else:
-            self.widget.ui.engine.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
+            self.widget.ui.label_panel.current_tab.scene.engine.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
 
 
 app = QtWidgets.QApplication(sys.argv)

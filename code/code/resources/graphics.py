@@ -8,7 +8,7 @@ import sys; sys.path += ['E://0//git//python-gachi-browser//code//code//resource
 class Ui_Main(Ui_Main_old):
     
     def setupUi(self, Main):
-        self.label_panel = PanelHoldButton(Main, Main.scene)
+        self.label_panel = PanelHoldLabel(Main, Main.scene)
         self.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
         self.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
         self.button_reload = PushedLabel(Main, 'resources//images//arrow_reload.png', 57, 30, 28, 20)
@@ -16,6 +16,7 @@ class Ui_Main(Ui_Main_old):
         self.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
         self.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
         self.label_panel.view_current_page = ViewMainPage(Main)
+        self.label_panel.addTab()
         self.label_panel.addTab()
 
         super(Ui_Main, self).setupUi(Main)
@@ -46,7 +47,7 @@ class Ui_Main(Ui_Main_old):
         self.button_scale.setGeometry(width-53, 4, 20, 20)
         self.button_roll.setGeometry(width-76, 4, 20, 20)
         self.label_panel.setGeometry(0, 0, width+10, 55)
-        self.engine.setGeometry(0, 54, width, height-55)
+        self.label_panel.view_current_page.setGeometry(0, 54, width, height-55)
 
 
     def connecting(self):
