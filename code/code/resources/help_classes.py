@@ -41,9 +41,9 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     def closeTab(self):
         tab = self.sender().parent
-        del self.__dict__[tab.id]
-        tab.deleteLater()
+        tab.delete()
         self.tab_count -= 1
+        print(self.__dict__)
 
     # helper functions
 
@@ -124,6 +124,16 @@ class PanelTab(QtWidgets.QLabel):
 
     def mousePressEvent(self, event):
         self.parent.openTab(self)
+
+    def delete(self):
+        print(self.parent.__dict__)
+        self.deleteLater()
+        self.scene.deleteLater()
+        self.scene.engine.deleteLater()
+        del self.scene.engine
+        del self.scene
+        del self.parent.__dict__[self.id]
+        del self
 
 
 
