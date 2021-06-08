@@ -135,6 +135,9 @@ class PanelTab(QtWidgets.QLabel):
     def mousePressEvent(self, event):
         self.parent.openTab(self)
 
+    def mouseMoveEvent(self, event):
+        pass
+
     def delete(self):
         self.deleteLater()
         self.scene.deleteLater()
