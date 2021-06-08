@@ -5,21 +5,25 @@ class SearchLineEdit(QtWidgets.QLineEdit):
 
     def __init__(self, parent):
         super(SearchLineEdit, self).__init__(parent=parent)
-        self.widget = parent
+        self.parent = parent
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Return:
-            self.widget.scene.button_sex_handler()
+            self.parent.scene.button_sex_handler()
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
 
 
 class PanelHoldLabel(QtWidgets.QLabel):
 
+    transformed = QtCore.pyqtSignal()
+
     def __init__(self, parent, scene):
         super(PanelHoldLabel, self).__init__(parent=parent)
+        self.parent = parent
         self.scene = scene
-        self.setGeometry(-1, -1, 1090, 55)
+        self.width, self.height = parent.width+10, 55
+        self.setGeometry(-1, -1, self.width, self.height)
         self.setStyleSheet("QLabel{\n"
 "    \n"
 "    background-color: rgb(167, 229, 255);\n"
@@ -30,6 +34,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 900, 0, 25, 25)
         self.button_add_tab.clicked.connect(self.addTab)
         self.refresh()
+        self.connecting()
 
     def addTab(self, url='https://www.google.com/'):
         scene = PageScene(self.view_current_page, url)
@@ -58,10 +63,12 @@ class PanelHoldLabel(QtWidgets.QLabel):
             pos_x += 95
         self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
         self.button_add_tab.x = pos_x
-        print(self.button_add_tab.x, self.button_add_tab.y)
+
+    def setSceneSize(self):
+        scene = self.current_tab.scene
+        self.current_tab.setGeometry(0, 0, self.parent.width, self.parent.height)
 
     # helper functions
-
     def mousePressEvent(self, event):
         self.mp = event.globalPos() - self.scene.view.pos()
 
@@ -71,6 +78,16 @@ class PanelHoldLabel(QtWidgets.QLabel):
         except:
             pass
 
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        print('im here')
+        self.width = self.parent.width + 10 # self.height = const
+        print(self.width)
+        self.setGeometry(0, 0, self.width, self.height)
+        self.transformed.emit()
+
 
 class PageScene(QtWidgets.QGraphicsScene):
 
@@ -78,12 +95,12 @@ class PageScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent, url):
         super(PageScene, self).__init__()
-        self.width, self.height = parent.width-2, parent.height-2
-        self.engine = ViewEnginePage(self)
+        self.parent = parent
+        self.engine = ViewEnginePage(self.parent)
         self.engine.load(QtCore.QUrl(url))
         self.page = self.engine.page()
         self.title = self.page.title()
-        self.setSceneRect(0, 54, self.width, self.height)
+        self.setSceneRect(0, 54, self.parent.width-2, self.parent.height-2)
         self.addWidget(self.engine)
 
     def action_page_back(self):
@@ -100,7 +117,8 @@ class ViewEnginePage(QtWebEngineWidgets.QWebEngineView):
 
     def __init__(self, parent):
         super(ViewEnginePage, self).__init__()
-        self.setGeometry(0, 54, parent.width, parent.height)
+        self.parent = parent
+        self.setGeometry(0, 54, self.parent.width, self.parent.height)
 
 
 class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
@@ -113,6 +131,7 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
         self.x, self.y, self.width, self.height = x, y, width, height
         self.setPixmap(QtGui.QPixmap(pixmap))
         self.setGeometry(x, y, width, height)
+        self.connecting()
 
     def mousePressEvent(self, event):
         # self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
@@ -123,14 +142,22 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
     def mouseMoveEvent(self, event):
         pass
 
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        pass
+
 
 class PanelTab(QtWidgets.QLabel):
 
+    transformed = QtCore.pyqtSignal()
+
     def __init__(self, parent, scene, count):
         super(PanelTab, self).__init__(parent=parent)
+        self.parent = parent
         self.id = f'tab_{count}'
         self.scene = scene
-        self.parent = parent
         if count > 0: self.x = 95*count + 1
         else: self.x = 0
         self.y = 0
@@ -156,11 +183,18 @@ class PanelTab(QtWidgets.QLabel):
         del self.parent.tab_dict[self.id]
         del self
 
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        self.transformed.emit()
+
 
 
 class ViewMainPage(QtWidgets.QGraphicsView):
 
     def __init__(self, parent):
         super(ViewMainPage, self).__init__(parent=parent)
+        self.parent = parent
         self.width, self.height = 1080, 666
         self.setGeometry(0, 54, self.width, self.height)

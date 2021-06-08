@@ -8,6 +8,7 @@ import sys; sys.path += ['E://0//git//python-gachi-browser//code//code//resource
 class Ui_Main(Ui_Main_old):
     
     def setupUi(self, Main):
+        self.parent = Main
         self.label_panel = PanelHoldLabel(Main, Main.scene)
         self.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
         self.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
@@ -38,15 +39,16 @@ class Ui_Main(Ui_Main_old):
             self.button_searchCondition.search_site = True
             self.button_searchCondition.setText('🌏')
 
-    def setUiSize(self, width, height):
-        self.edit_searchLine.setGeometry(94, 32, width-200, 18)
-        self.button_sex.setGeometry(width-80, 31, 30, 20)
-        self.button_searchCondition.setGeometry(width-38, 31, 30, 20)
-        self.button_close.setGeometry(width-30, 4, 20, 20)
-        self.button_scale.setGeometry(width-53, 4, 20, 20)
-        self.button_roll.setGeometry(width-76, 4, 20, 20)
-        self.label_panel.setGeometry(0, 0, width+10, 55)
-        self.label_panel.view_current_page.setGeometry(0, 54, width, height-55)
+    # def setUiSize(self, width, height):
+    #     self.edit_searchLine.setGeometry(94, 32, width-200, 18)
+    #     self.button_sex.setGeometry(width-80, 31, 30, 20)
+    #     self.button_searchCondition.setGeometry(width-38, 31, 30, 20)
+    #     self.button_close.setGeometry(width-30, 4, 20, 20)
+    #     self.button_scale.setGeometry(width-53, 4, 20, 20)
+    #     self.button_roll.setGeometry(width-76, 4, 20, 20)
+    #     self.label_panel.setGeometry(0, 0, width+10, 55)
+    #     self.label_panel.view_current_page.setGeometry(0, 54, width, height-55)
+    #     self.label_panel.setSceneSize()
 
 
     def connecting(self):
