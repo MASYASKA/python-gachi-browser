@@ -26,12 +26,14 @@ class PanelHoldLabel(QtWidgets.QLabel):
 "}")
         self.view_current_page = ViewMainPage(parent)
         self.tab_count = 0
+        self.tab_dict = dict([])
 
     def addTab(self, url='https://www.google.com/'):
         scene = PageScene(self.view_current_page, url)
-        self.__dict__[f'tab_{self.tab_count}'] = 'loading...'
+        # self.__dict__[f'tab_{self.tab_count}'] = 'loading...'
         tab = PanelTab(self, scene, self.tab_count)
-        self.__dict__[tab.id] = tab
+        self.tab_dict[f'tab_{self.tab_count}'] = tab
+        # self.__dict__[tab.id] = tab
         self.tab_count += 1
         self.openTab(tab)
 
@@ -43,7 +45,14 @@ class PanelHoldLabel(QtWidgets.QLabel):
         tab = self.sender().parent
         tab.delete()
         self.tab_count -= 1
-        print(self.__dict__)
+        self.refresh()
+
+    def refresh(self):
+        pos_x, pos_y = 0, 0
+        for key in self.tab_dict.keys():
+            obj = self.tab_dict[key]
+            obj.setGeometry(pos_x, pos_y, obj.width, obj.height)
+            pos_x += 96
 
     # helper functions
 
@@ -116,7 +125,8 @@ class PanelTab(QtWidgets.QLabel):
         if count > 0: self.x = 95*count + 1
         else: self.x = 0
         self.y = 0
-        self.setGeometry(self.x, self.y, 95, 25)
+        self.width, self.height = 95, 25
+        self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet(r"QLabel{ background-color : white}")
         self.button_close = PushedLabel(self, "resources//images//button_tab_close.png", 70, 0, 25, 25)
         self.button_close.clicked.connect(self.parent.closeTab)
@@ -126,13 +136,12 @@ class PanelTab(QtWidgets.QLabel):
         self.parent.openTab(self)
 
     def delete(self):
-        print(self.parent.__dict__)
         self.deleteLater()
         self.scene.deleteLater()
         self.scene.engine.deleteLater()
         del self.scene.engine
         del self.scene
-        del self.parent.__dict__[self.id]
+        del self.parent.tab_dict[self.id]
         del self
 
 

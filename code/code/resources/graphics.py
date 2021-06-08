@@ -18,6 +18,8 @@ class Ui_Main(Ui_Main_old):
         self.label_panel.view_current_page = ViewMainPage(Main)
         self.label_panel.addTab()
         self.label_panel.addTab()
+        self.label_panel.addTab()
+        self.label_panel.addTab()
 
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
