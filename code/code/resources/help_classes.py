@@ -27,15 +27,18 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.view_current_page = ViewMainPage(parent)
         self.tab_count = 0
         self.tab_dict = dict([])
+        self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 900, 0, 25, 25)
+        self.button_add_tab.clicked.connect(self.addTab)
+        self.refresh()
 
     def addTab(self, url='https://www.google.com/'):
         scene = PageScene(self.view_current_page, url)
-        # self.__dict__[f'tab_{self.tab_count}'] = 'loading...'
         tab = PanelTab(self, scene, self.tab_count)
+        tab.show()
         self.tab_dict[f'tab_{self.tab_count}'] = tab
-        # self.__dict__[tab.id] = tab
         self.tab_count += 1
         self.openTab(tab)
+        self.refresh()
 
     def openTab(self, tab):
         self.view_current_page.setScene(tab.scene)
@@ -51,8 +54,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
         pos_x, pos_y = 0, 0
         for key in self.tab_dict.keys():
             obj = self.tab_dict[key]
-            obj.setGeometry(pos_x, pos_y, obj.width, obj.height)
-            pos_x += 96
+            obj.setGeometry(pos_x+2 , pos_y, obj.width, obj.height)
+            pos_x += 95
+        self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
+        self.button_add_tab.x = pos_x
+        print(self.button_add_tab.x, self.button_add_tab.y)
 
     # helper functions
 
@@ -109,10 +115,13 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
         self.setGeometry(x, y, width, height)
 
     def mousePressEvent(self, event):
-        self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
-        QtTest.QTest.qWait(100)
-        self.setGeometry(self.x, self.y, self.width, self.height)
+        # self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
+        # QtTest.QTest.qWait(100)
+        # self.setGeometry(self.x, self.y, self.width, self.height)
         self.clicked.emit()
+
+    def mouseMoveEvent(self, event):
+        pass
 
 
 class PanelTab(QtWidgets.QLabel):

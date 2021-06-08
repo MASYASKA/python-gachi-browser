@@ -17,9 +17,6 @@ class Ui_Main(Ui_Main_old):
         self.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
         self.label_panel.view_current_page = ViewMainPage(Main)
         self.label_panel.addTab()
-        self.label_panel.addTab()
-        self.label_panel.addTab()
-        self.label_panel.addTab()
 
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
