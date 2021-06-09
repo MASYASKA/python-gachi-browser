@@ -13,7 +13,7 @@ class MainView(QtWidgets.QGraphicsView):
         self.setWindowTitle('Gachi Browser')
         self.scene = MainScene(self, graphics.Ui_Main)
         self.setScene(self.scene)
-        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        # self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.maximized = False
 
     def showMiximazed(self):
