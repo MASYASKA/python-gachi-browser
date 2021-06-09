@@ -65,9 +65,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_close.setGeometry(self.width-33, 4, 20, 20)
         self.button_scale.setGeometry(self.width-56, 4, 20, 20)
         self.button_roll.setGeometry(self.width-79, 4, 20, 20)
-        self.edit_searchLine.setGeometry(94, 32, self.width-185, 18)
-        self.button_sex.setGeometry(self.width-80, 31, 30, 20)
-        self.button_searchCondition.setGeometry(self.width-42, 31, 30, 20)
+        self.edit_searchLine.setGeometry(94, 32, self.width-115, 18)
         self.setGeometry(0, 0, self.width, self.height)
         self.transformed.emit()
 
@@ -83,6 +81,10 @@ class PanelHoldLabel(QtWidgets.QLabel):
     def setSceneSize(self):
         scene = self.current_tab.scene
         self.current_tab.setGeometry(0, 0, self.parent.width, self.parent.height)
+
+    def load_current_page(self):
+        url = QtCore.QUrl(f'https://www.google.com/search?q={self.edit_searchLine.text()}')
+        self.current_tab.scene.engine.load(url)
 
 
 class ViewMainPage(QtWidgets.QGraphicsView):
@@ -239,9 +241,11 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super(SearchLineEdit, self).__init__(parent=parent)
         self.parent = parent
+        self.setGeometry(QtCore.QRect(93, 33, 975, 16))
+        self.setStyleSheet(" QLineEdit{\n""    border-radius: 2px;\n""    border: 1px solid black;\n""}")
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Return:
-            self.parent.scene.button_sex_handler()
+            self.parent.ui.label_panel.load_current_page()
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
