@@ -10,19 +10,20 @@ class Ui_Main(Ui_Main_old):
     def setupUi(self, Main):
         self.parent = Main
         self.label_panel = PanelHoldLabel(Main, Main.scene)
-        self.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
-        self.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
-        self.button_reload = PushedLabel(Main, 'resources//images//arrow_reload.png', 57, 30, 28, 20)
-        self.button_close = PushedLabel(Main, 'resources//images//cross.png', 1052, 4, 20, 20)
-        self.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
-        self.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
-        self.label_panel.view_current_page = ViewMainPage(Main)
-        self.label_panel.addTab()
+        self.label_panel.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
+        self.label_panel.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
+        self.label_panel.button_reload = PushedLabel(Main, 'resources//images//arrow_reload.png', 57, 30, 28, 20)
+        self.label_panel.button_close = PushedLabel(Main, 'resources//images//cross.png', 1052, 4, 20, 20)
+        self.label_panel.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
+        self.label_panel.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
 
         super(Ui_Main, self).setupUi(Main)
         self.button_searchCondition.setText('🔍')
         font = QtGui.QFont()
         font.setPointSize(5)
+        self.label_panel.button_sex = self.button_sex
+        self.label_panel.edit_searchLine = self.edit_searchLine
+        self.label_panel.button_searchCondition = self.button_searchCondition
         self.button_searchCondition.setFont(font)
         self.button_searchCondition.clicked.connect(self.changeCondition)
         self.button_searchCondition.search_site = False
@@ -52,6 +53,6 @@ class Ui_Main(Ui_Main_old):
 
 
     def connecting(self):
-        self.button_back.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Back).trigger)
-        self.button_forward.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Forward).trigger)
-        self.button_reload.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Reload).trigger)
+        self.label_panel.button_back.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Back).trigger)
+        self.label_panel.button_forward.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Forward).trigger)
+        self.label_panel.button_reload.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Reload).trigger)

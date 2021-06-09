@@ -55,11 +55,12 @@ class MainScene(QtWidgets.QGraphicsScene):
     def connecting(self):
         self.parent.transformed.connect(self.transform)
         self.widget.ui.button_sex.clicked.connect(self.button_sex_handler)
-        self.widget.ui.button_close.clicked.connect(self.view.close)
-        self.widget.ui.button_roll.clicked.connect(self.view.showMinimized)
-        self.widget.ui.button_scale.clicked.connect(self.view.showMiximazed)
+        self.widget.ui.label_panel.button_close.clicked.connect(self.view.close)
+        self.widget.ui.label_panel.button_roll.clicked.connect(self.view.showMinimized)
+        self.widget.ui.label_panel.button_scale.clicked.connect(self.view.showMiximazed)
 
     def transform(self):
+        print('MainScene here!')
         self.width, self.height = self.parent.width-2, self.parent.height-2
         self.setSceneRect(0, 0, self.width, self.height)
         self.transformed.emit()
@@ -85,6 +86,7 @@ class MainWidget(QtWidgets.QWidget):
         self.parent.transformed.connect(self.transform)
 
     def transform(self):
+        print('MainWidget here!')
         self.width, self.height = self.parent.width, self.parent.height
         self.setGeometry(0, 0, self.width, self.height)
         self.transformed.emit()
