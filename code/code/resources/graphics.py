@@ -21,15 +21,16 @@ class Ui_Main(Ui_Main_old):
         self.button_searchCondition.setText('🔍')
         font = QtGui.QFont()
         font.setPointSize(5)
-        self.label_panel.button_sex = self.button_sex
-        self.label_panel.edit_searchLine = self.edit_searchLine
-        self.label_panel.button_searchCondition = self.button_searchCondition
         self.button_searchCondition.setFont(font)
         self.button_searchCondition.clicked.connect(self.changeCondition)
         self.button_searchCondition.search_site = False
         self.edit_searchLine = SearchLineEdit(Main)
-        self.edit_searchLine.setGeometry(QtCore.QRect(94, 32, 900, 18))
-        self.edit_searchLine.setObjectName("edit_searchLine")
+        self.edit_searchLine.setGeometry(QtCore.QRect(93, 33, 900, 16))
+        self.edit_searchLine.setStyleSheet(" QLineEdit{\n""    border-radius: 5px;\n""    border: 1px solid black;\n""}")
+        self.label_panel.button_sex = self.button_sex
+        self.label_panel.button_searchCondition = self.button_searchCondition
+        self.label_panel.edit_searchLine = self.edit_searchLine
+
         self.connecting()
 
     def changeCondition(self):

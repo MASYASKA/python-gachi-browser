@@ -13,16 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLineEdit" name="edit_searchLine">
-   <property name="geometry">
-    <rect>
-     <x>94</x>
-     <y>32</y>
-     <width>900</width>
-     <height>18</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="button_sex">
    <property name="geometry">
     <rect>
