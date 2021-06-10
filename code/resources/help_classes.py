@@ -26,8 +26,9 @@ class PanelHoldLabel(QtWidgets.QLabel):
     # tabs
 
     def addTab(self, url='https://www.google.com/'):
-        scene = PageScene(self.view_current_page, url)
-        tab = PanelTab(self, scene, self.tab_count)
+        tab = PanelTab(self, self.tab_count)
+        scene = PageScene(self.view_current_page, url, tab)
+        tab.scene = scene
         tab.show()
         self.tab_dict[f'tab_{self.tab_count}'] = tab
         self.tab_count += 1
@@ -80,7 +81,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
             else:
                 obj.setUnselected()
             obj.setGeometry(pos_x+2 , pos_y, obj.width, obj.height)
-            pos_x += 95
+            pos_x += 140
         self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
         self.button_add_tab.x = pos_x
 
@@ -118,18 +119,20 @@ class PanelTab(QtWidgets.QLabel):
 
     transformed = QtCore.pyqtSignal()
 
-    def __init__(self, parent, scene, count):
+    def __init__(self, parent, count):
         super(PanelTab, self).__init__(parent=parent)
         self.parent = parent
         self.id = f'tab_{count}'
-        self.scene = scene
-        if count > 0: self.x = 95*count
+        if count > 0: self.x = 140*count
         else: self.x = 0
         self.y = 0
-        self.width, self.height = 95, 25
+        self.width, self.height = 140, 25
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet(r"QLabel{ background-color : white}")
-        self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 70, 0, 25, 25)
+        self.title = QtWidgets.QLabel(self)
+        self.title.setGeometry(5, 0, 130, 25)
+        font = self.title.font(); font.setPixelSize(13); self.title.setFont(font)
+        self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 115, 0, 25, 25)
         self.button_tab_close.clicked.connect(self.parent.closeTab)
         self.connecting()
 
@@ -156,12 +159,17 @@ class PanelTab(QtWidgets.QLabel):
         self.transformed.emit()
 
     def setSelected(self):
-        self.setStyleSheet(r"QLabel{ background-color : black}")
+        self.setStyleSheet(r"QLabel{ background-color : rgb(23, 114, 69);}")
+        self.title.setStyleSheet(r"QLabel{ color : white; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_white.png'))
 
     def setUnselected(self):
-        self.setStyleSheet(r"QLabel{ background-color : white}")
+        self.setStyleSheet(r"QLabel{ background-color : white;}")
+        self.title.setStyleSheet(r"QLabel{ color: black; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_black.png'))
+
+    def setPageName(self):
+        self.title.setText(self.scene.engine.page().title())
 
 
 class PageScene(QtWidgets.QGraphicsScene):
@@ -169,9 +177,10 @@ class PageScene(QtWidgets.QGraphicsScene):
     changed = QtCore.pyqtSignal()
     transformed = QtCore.pyqtSignal()
 
-    def __init__(self, parent, url):
+    def __init__(self, parent, url, tab):
         super(PageScene, self).__init__()
         self.parent = parent
+        self.tab = tab
         self.width, self.height = parent.width-2, parent.height-2
         self.engine = ViewEnginePage(self)
         self.engine.load(QtCore.QUrl(url))
@@ -192,6 +201,7 @@ class PageScene(QtWidgets.QGraphicsScene):
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
+        self.engine.page().loadFinished.connect(self.tab.setPageName)
 
     def transform(self):
         print('PageScene here!')
