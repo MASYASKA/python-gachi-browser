@@ -25,7 +25,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     # tabs
 
-    def addTab(self, url='https://www.google.com/'):
+    def addTab(self, url='https://google.com/'):
         tab = PanelTab(self, self.tab_count)
         scene = PageScene(self.view_current_page, url, tab)
         tab.scene = scene
@@ -38,8 +38,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
     def openTab(self, tab):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
-        self.current_tab.setStyleSheet(r"QLabel{ background-color : black}")
         self.refresh()
+        print(self.current_tab.id)
 
     def closeTab(self):
         tab = self.sender().parent
@@ -128,12 +128,15 @@ class PanelTab(QtWidgets.QLabel):
         self.y = 0
         self.width, self.height = 140, 25
         self.setGeometry(self.x, self.y, self.width, self.height)
-        self.setStyleSheet(r"QLabel{ background-color : white}")
+        self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
         self.title = QtWidgets.QLabel(self)
-        self.title.setGeometry(5, 0, 130, 25)
+        self.title.setGeometry(25, 0, 130, 25)
         font = self.title.font(); font.setPixelSize(13); self.title.setFont(font)
+        self.icon = QtWidgets.QLabel(self)
+        self.icon.setGeometry(5, 3, 18, 18)
         self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 115, 0, 25, 25)
         self.button_tab_close.clicked.connect(self.parent.closeTab)
+        self.setAttribute(QtCore.Qt.WA_Hover)
         self.connecting()
 
     def mousePressEvent(self, event):
@@ -159,17 +162,40 @@ class PanelTab(QtWidgets.QLabel):
         self.transformed.emit()
 
     def setSelected(self):
+        self.selected = True
         self.setStyleSheet(r"QLabel{ background-color : rgb(23, 114, 69);}")
         self.title.setStyleSheet(r"QLabel{ color : white; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_white.png'))
+        self.button_tab_close.setVisible(True)
 
     def setUnselected(self):
-        self.setStyleSheet(r"QLabel{ background-color : white;}")
+        self.selected = False
+        self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
         self.title.setStyleSheet(r"QLabel{ color: black; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_black.png'))
+        self.button_tab_close.setVisible(False)
 
     def setPageName(self):
-        self.title.setText(self.scene.engine.page().title())
+        title = self.scene.engine.page().title()
+        self.title.setText(title)
+        self.setToolTip(title)
+        QtTest.QTest.qWait(3000)
+        icon = self.scene.engine.page().icon()
+        self.icon.setPixmap(icon.pixmap(QtCore.QSize(15, 15)))
+
+    def enterEvent(self, event):
+        if self.selected:
+            pass
+        else:
+            self.setStyleSheet(r"QLabel{ background-color : rgb(142, 230, 155)}")
+            self.button_tab_close.setVisible(True)
+
+    def leaveEvent(self, event):
+        if self.selected:
+            pass
+        else:
+            self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
+            self.button_tab_close.setVisible(False)
 
 
 class PageScene(QtWidgets.QGraphicsScene):
