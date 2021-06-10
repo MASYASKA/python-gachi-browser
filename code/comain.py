@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 import sys; sys.path += ['E://0//git//python-gachi-browser//code//resources']
 import graphics
 
+
 class MainView(QtWidgets.QGraphicsView):
 
     transformed = QtCore.pyqtSignal()

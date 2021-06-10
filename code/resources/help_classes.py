@@ -37,6 +37,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
     def openTab(self, tab):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
+        self.current_tab.setStyleSheet(r"QLabel{ background-color : black}")
+        self.refresh()
 
     def closeTab(self):
         tab = self.sender().parent
@@ -73,6 +75,10 @@ class PanelHoldLabel(QtWidgets.QLabel):
         pos_x, pos_y = 0, 0
         for key in self.tab_dict.keys():
             obj = self.tab_dict[key]
+            if obj is self.current_tab:
+                obj.setSelected()
+            else:
+                obj.setUnselected()
             obj.setGeometry(pos_x+2 , pos_y, obj.width, obj.height)
             pos_x += 95
         self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
@@ -123,7 +129,7 @@ class PanelTab(QtWidgets.QLabel):
         self.width, self.height = 95, 25
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet(r"QLabel{ background-color : white}")
-        self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close.png", 70, 0, 25, 25)
+        self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 70, 0, 25, 25)
         self.button_tab_close.clicked.connect(self.parent.closeTab)
         self.connecting()
 
@@ -148,6 +154,14 @@ class PanelTab(QtWidgets.QLabel):
     def transform(self):
         print('PanelTab here!')
         self.transformed.emit()
+
+    def setSelected(self):
+        self.setStyleSheet(r"QLabel{ background-color : black}")
+        self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_white.png'))
+
+    def setUnselected(self):
+        self.setStyleSheet(r"QLabel{ background-color : white}")
+        self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_black.png'))
 
 
 class PageScene(QtWidgets.QGraphicsScene):
