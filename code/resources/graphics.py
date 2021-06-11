@@ -22,6 +22,15 @@ class Ui_Main(Ui_Main_old):
         self.connecting()
 
     def connecting(self):
-        self.label_panel.button_back.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Back).trigger)
-        self.label_panel.button_forward.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Forward).trigger)
-        self.label_panel.button_reload.clicked.connect(self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Reload).trigger)
+        self.label_panel.button_reload.clicked.connect(self.reloadHandler)
+        self.label_panel.button_back.clicked.connect(self.backHandler)
+        self.label_panel.button_forward.clicked.connect(self.forwardHandler)
+
+    def reloadHandler(self):
+        self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Reload).trigger()
+
+    def backHandler(self):
+        self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Back).trigger()
+
+    def forwardHandler(self):
+        self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Forward).trigger()

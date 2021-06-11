@@ -61,13 +61,6 @@ class MainScene(QtWidgets.QGraphicsScene):
         self.setSceneRect(0, 0, self.width, self.height)
         self.transformed.emit()
 
-
-    # def button_sex_handler(self):
-    #     if self.widget.ui.button_searchCondition.search_site:
-    #         self.widget.ui.label_panel.current_tab.scene.engine.load(QtCore.QUrl(self.widget.ui.edit_searchLine.text()))
-    #     else:
-    #         self.widget.ui.label_panel.current_tab.scene.engine.load(QtCore.QUrl(f'https://www.google.com/search?q={self.widget.ui.edit_searchLine.text()}'))
-
 class MainWidget(QtWidgets.QWidget):
 
     transformed = QtCore.pyqtSignal()

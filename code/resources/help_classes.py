@@ -25,7 +25,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     # tabs
 
-    def addTab(self, url='https://google.com/'):
+    def addTab(self, url='https://www.google.com/'):
         tab = PanelTab(self, self.tab_count)
         scene = PageScene(self.view_current_page, url, tab)
         tab.scene = scene
