@@ -17,6 +17,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.view_current_page = ViewMainPage(parent)
         self.tab_count = 0
         self.tab_dict = dict([])
+        self.tab_lst = []
         self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 0, 0, 25, 25)
         self.button_add_tab.clicked.connect(self.addTab)
         self.refresh()
@@ -31,6 +32,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         tab.scene = scene
         tab.show()
         self.tab_dict[f'tab_{self.tab_count}'] = tab
+        self.tab_lst += [tab]
         self.tab_count += 1
         self.openTab(tab)
         self.refresh()
@@ -39,48 +41,46 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
         self.refresh()
-        print(self.current_tab.id)
+        tab.raise_()
 
     def closeTab(self):
         tab = self.sender().parent
+        for index in range(len(self.tab_lst)):
+            if self.tab_lst[index] is tab:
+                self.tab_lst.pop(index)
+                break
         tab.delete()
         self.tab_count -= 1
         self.refresh()
 
-    # helper functions
-
-    def mousePressEvent(self, event):
-        self.mp = event.globalPos() - self.scene.view.pos()
-
-    def mouseMoveEvent(self, event):
+    def moveTabForward(self, tab):
         try:
-            self.scene.view.move(event.globalPos() - self.mp)
+            index = self.tab_lst.index(tab)
+            self.tab_lst[index], self.tab_lst[index+1] = self.tab_lst[index+1], self.tab_lst[index]
+            self.tab_lst[index+1].x, self.tab_lst[index].x = self.tab_lst[index].x, self.tab_lst[index+1].x
+            tab.press_event_coord_x = tab.move_event_coord_x
         except:
             pass
 
-    def connecting(self):
-        self.parent.transformed.connect(self.transform)
+    def moveTabBack(self, tab):
+        try:
+            index = self.tab_lst.index(tab)
+            self.tab_lst[index], self.tab_lst[index-1] = self.tab_lst[index-1], self.tab_lst[index]
+            self.tab_lst[index].x, self.tab_lst[index-1].x = self.tab_lst[index-1].x, self.tab_lst[index].x
+            tab.press_event_coord_x = tab.move_event_coord_x
+        except:
+            pass
 
-    def transform(self):
-        print('PanelHoldLabel here!')
-        self.width = self.parent.width + 10 # self.height = const
-        print(self.width, self.height)
-        self.button_close.setGeometry(self.width-33, 4, 20, 20)
-        self.button_scale.setGeometry(self.width-56, 4, 20, 20)
-        self.button_roll.setGeometry(self.width-79, 4, 20, 20)
-        self.edit_searchLine.setGeometry(94, 32, self.width-115, 18)
-        self.setGeometry(0, 0, self.width, self.height)
-        self.transformed.emit()
+    # helper functions
 
     def refresh(self):
         pos_x, pos_y = 0, 0
-        for key in self.tab_dict.keys():
-            obj = self.tab_dict[key]
-            if obj is self.current_tab:
-                obj.setSelected()
+        for tab in self.tab_lst:
+            if tab is self.current_tab:
+                tab.setSelected()
             else:
-                obj.setUnselected()
-            obj.setGeometry(pos_x+2 , pos_y, obj.width, obj.height)
+                tab.setUnselected()
+            tab.setGeometry(pos_x+2 , pos_y, tab.width, tab.height)
             pos_x += 140
         self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
         self.button_add_tab.x = pos_x
@@ -93,6 +93,33 @@ class PanelHoldLabel(QtWidgets.QLabel):
         url = QtCore.QUrl(f'https://www.google.com/search?q={self.edit_searchLine.text()}')
         self.current_tab.scene.engine.load(url)
 
+    # events
+
+    def mousePressEvent(self, event):
+        self.mp = event.globalPos() - self.scene.view.pos()
+
+    def mouseMoveEvent(self, event):
+        try:
+            self.scene.view.move(event.globalPos() - self.mp)
+        except:
+            pass
+
+    # required functions
+
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        print('PanelHoldLabel here!')
+        self.width = self.parent.width + 10 # self.height = const
+        self.button_close.setGeometry(self.width-33, 4, 20, 20)
+        self.button_scale.setGeometry(self.width-56, 4, 20, 20)
+        self.button_roll.setGeometry(self.width-79, 4, 20, 20)
+        self.edit_searchLine.setGeometry(94, 32, self.width-115, 18)
+        self.setGeometry(0, 0, self.width, self.height)
+        self.transformed.emit()
+
+
 
 class ViewMainPage(QtWidgets.QGraphicsView):
 
@@ -104,6 +131,8 @@ class ViewMainPage(QtWidgets.QGraphicsView):
         self.width, self.height = 1080, 666
         self.setGeometry(0, 54, self.width, self.height)
         self.connecting()
+
+    # required functions
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
@@ -123,9 +152,11 @@ class PanelTab(QtWidgets.QLabel):
         super(PanelTab, self).__init__(parent=parent)
         self.parent = parent
         self.id = f'tab_{count}'
+        self.position = count
         if count > 0: self.x = 140*count
         else: self.x = 0
         self.y = 0
+        self.pos_x, self.pos_y = self.x, self.y
         self.width, self.height = 140, 25
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
@@ -139,11 +170,7 @@ class PanelTab(QtWidgets.QLabel):
         self.setAttribute(QtCore.Qt.WA_Hover)
         self.connecting()
 
-    def mousePressEvent(self, event):
-        self.parent.openTab(self)
-
-    def mouseMoveEvent(self, event):
-        pass
+    # helper functions
 
     def delete(self):
         self.deleteLater()
@@ -153,13 +180,6 @@ class PanelTab(QtWidgets.QLabel):
         del self.scene
         del self.parent.tab_dict[self.id]
         del self
-
-    def connecting(self):
-        self.parent.transformed.connect(self.transform)
-
-    def transform(self):
-        print('PanelTab here!')
-        self.transformed.emit()
 
     def setSelected(self):
         self.selected = True
@@ -180,8 +200,13 @@ class PanelTab(QtWidgets.QLabel):
         self.title.setText(title)
         self.setToolTip(title)
         QtTest.QTest.qWait(3000)
-        icon = self.scene.engine.page().icon()
-        self.icon.setPixmap(icon.pixmap(QtCore.QSize(15, 15)))
+        try:
+            icon = self.scene.engine.page().icon()
+            self.icon.setPixmap(icon.pixmap(QtCore.QSize(15, 15)))
+        except:
+            pass
+
+    # events
 
     def enterEvent(self, event):
         if self.selected:
@@ -196,6 +221,40 @@ class PanelTab(QtWidgets.QLabel):
         else:
             self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
             self.button_tab_close.setVisible(False)
+
+    def mousePressEvent(self, event):
+        self.parent.openTab(self)
+        self.press_event_coord_x = event.globalPos().x()
+
+    def mouseMoveEvent(self, event):
+        moving = event.globalPos().x() - self.mp.x()
+        self.mv = event.globalPos()
+        print(f'mp -> {self.mp}\tmv -> {self.mv}')
+        print(moving)
+        self.setGeometry(self.x, self.y, self.width, self.height)
+        if moving > 70:
+            self.parent.moveTabForward(self)
+
+    def mouseMoveEvent(self, event):
+        self.move_event_coord_x = event.globalPos().x()
+        diff_x = self.move_event_coord_x - self.press_event_coord_x
+        self.setGeometry(self.x+diff_x, self.y, self.width, self.height)
+        if diff_x > 140:
+            self.parent.moveTabForward(self)
+        if diff_x < -140:
+            self.parent.moveTabBack(self)
+
+    def mouseReleaseEvent(self, event):
+        self.parent.refresh()
+
+    # required functions
+
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        print('PanelTab here!')
+        self.transformed.emit()
 
 
 class PageScene(QtWidgets.QGraphicsScene):
@@ -216,6 +275,8 @@ class PageScene(QtWidgets.QGraphicsScene):
         self.addWidget(self.engine)
         self.connecting()
 
+    # helper functions
+
     def action_page_back(self):
         self.changed.emit()
 
@@ -224,6 +285,8 @@ class PageScene(QtWidgets.QGraphicsScene):
 
     def action_page_reload(self):
         self.changed.emit()
+
+    # required funcions
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
@@ -244,6 +307,8 @@ class ViewEnginePage(QtWebEngineWidgets.QWebEngineView):
         self.width, self.height = parent.width, parent.height
         self.setGeometry(0, 54, self.width, self.height)
         self.connecting()
+
+    # required functions
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
@@ -269,6 +334,8 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
         self.setGeometry(x, y, width, height)
         self.connecting()
 
+    # events
+
     def mousePressEvent(self, event):
         # self.setGeometry(self.x+3, self.y+3, self.width-3, self.height-3)
         # QtTest.QTest.qWait(100)
@@ -277,6 +344,8 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
 
     def mouseMoveEvent(self, event):
         pass
+
+    # required functions
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
@@ -294,8 +363,13 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         self.setGeometry(QtCore.QRect(93, 33, 975, 16))
         self.setStyleSheet(" QLineEdit{\n""    border-radius: 2px;\n""    border: 1px solid black;\n""}")
 
+    # events
+
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Return:
             self.parent.ui.label_panel.load_current_page()
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
+
+# убран баг, когда браузер вылетал при закрытии вкладки до загрузки её иконки, теперь при нажатии на виджет он переходит на передний план.
+# проблема в том, что мув двигает от 0, 0
