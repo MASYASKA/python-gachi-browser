@@ -115,7 +115,10 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_close.setGeometry(self.width-33, 4, 20, 20)
         self.button_scale.setGeometry(self.width-56, 4, 20, 20)
         self.button_roll.setGeometry(self.width-79, 4, 20, 20)
-        self.edit_searchLine.setGeometry(94, 32, self.width-115, 18)
+        self.button_menu.setGeometry(self.width-102, 4, 20, 20)
+        self.button_menu.label_menu.setGeometry(self.width-272, 26, 190, 200)
+        self.button_download.setGeometry(self.width-38, 25, 28, 28)
+        self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
         self.setGeometry(0, 0, self.width, self.height)
         self.transformed.emit()
 
@@ -225,15 +228,6 @@ class PanelTab(QtWidgets.QLabel):
     def mousePressEvent(self, event):
         self.parent.openTab(self)
         self.press_event_coord_x = event.globalPos().x()
-
-    def mouseMoveEvent(self, event):
-        moving = event.globalPos().x() - self.mp.x()
-        self.mv = event.globalPos()
-        print(f'mp -> {self.mp}\tmv -> {self.mv}')
-        print(moving)
-        self.setGeometry(self.x, self.y, self.width, self.height)
-        if moving > 70:
-            self.parent.moveTabForward(self)
 
     def mouseMoveEvent(self, event):
         self.move_event_coord_x = event.globalPos().x()
@@ -360,7 +354,7 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super(SearchLineEdit, self).__init__(parent=parent)
         self.parent = parent
-        self.setGeometry(QtCore.QRect(93, 33, 975, 16))
+        self.setGeometry(QtCore.QRect(93, 33, 950, 16))
         self.setStyleSheet(" QLineEdit{\n""    border-radius: 2px;\n""    border: 1px solid black;\n""}")
 
     # events
@@ -371,5 +365,22 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
 
-# убран баг, когда браузер вылетал при закрытии вкладки до загрузки её иконки, теперь при нажатии на виджет он переходит на передний план.
-# проблема в том, что мув двигает от 0, 0
+class MenuLabel(QtWidgets.QLabel):
+
+    def __init__(self, parent, x, y, width, height):
+        super(MenuLabel, self).__init__(parent=parent)
+        self.parent = parent
+        self.width, self.height = width, height
+        self.x, self.y = x, y
+        self.setGeometry(self.x, self.y, self.width, self.height)
+        self.setStyleSheet(r"QLabel{ background-color : white}")
+        self.setVisible(False)
+        self.visible = False
+
+    def setMenu(self):
+        if self.visible:
+            self.setVisible(False)
+            self.visible = False
+        else:
+            self.setVisible(True)
+            self.visible = True
