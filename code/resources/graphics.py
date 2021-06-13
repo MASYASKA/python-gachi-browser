@@ -21,7 +21,7 @@ class Ui_Main:
         self.label_panel.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
         self.label_panel.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
         self.label_panel.button_menu = PushedLabel(Main, 'resources//images//button_menu.png', 978, 4, 20, 20)
-        self.label_panel.button_menu.label_menu = MenuLabel(Main, 840, 26, 160, 100)
+        self.label_panel.button_menu.label_menu = MenuLabel(Main, 840, 26, 160)
         # self.label_panel.button_download.label_menu = MenuLabel(Main, 880, 55, 200, 600)
 
         self.connecting()

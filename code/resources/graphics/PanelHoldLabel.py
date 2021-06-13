@@ -122,7 +122,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_scale.setGeometry(self.width-56, 4, 20, 20)
         self.button_roll.setGeometry(self.width-79, 4, 20, 20)
         self.button_menu.setGeometry(self.width-102, 4, 20, 20)
-        self.button_menu.label_menu.setGeometry(self.width-245, 26, 160, 100)
+        self.button_menu.label_menu.setGeometry(self.width-245, self.button_menu.label_menu.y, 
+            self.button_menu.label_menu.width, self.button_menu.label_menu.height)
         # self.button_download.label_menu.setGeometry(self.width-210, 55, 200, 600)
         self.button_download.setGeometry(self.width-38, 25, 28, 28)
         self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
