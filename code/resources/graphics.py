@@ -1,11 +1,13 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets, QtTest
-from ui_class import Ui_Main as Ui_Main_old
-from ui_class import *
-from help_classes import *
-import sys; sys.path += ['E://0//git//python-gachi-browser//code//resources']
+import sys; sys.path += ['E://0//git//python-gachi-browser//code//resources//graphics']
+from PanelHoldLabel import *
+from PanelTab import *
+from PushedLabel import *
+from SearchLineEdit import *
+from MenuLabel import *
 
 
-class Ui_Main(Ui_Main_old):
+class Ui_Main:
     
     def setupUi(self, Main):
         self.parent = Main
@@ -22,7 +24,6 @@ class Ui_Main(Ui_Main_old):
         self.label_panel.button_menu.label_menu = MenuLabel(Main, 840, 26, 160, 200)
         self.label_panel.button_download.label_menu = MenuLabel(Main, 880, 55, 200, 600)
 
-        # super(Ui_Main, self).setupUi(Main)
         self.connecting()
 
     def connecting(self):
