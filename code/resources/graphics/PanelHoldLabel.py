@@ -14,8 +14,12 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.parent = parent
         self.scene = scene
         self.width, self.height = parent.width+10, 55
+        self.theme = "QLabel{background-color: rgb(119, 221, 119);}"
+        self.tab_theme_selected = "QLabel{ background-color : rgb(23, 114, 69);}"
+        self.tab_theme_unselected = "QLabel{ background-color : background-color: rgb(119, 221, 119);}"
+        self.tab_theme_unselected_light = "QLabel{ background-color : rgb(142, 230, 155)}"
         self.setGeometry(-1, -1, self.width, self.height)
-        self.setStyleSheet("QLabel{\n""    \n""    background-color: rgb(119, 221, 119);\n""}")
+        self.setStyleSheet(self.theme)
         self.view_current_page = ViewMainPage(parent)
         self.tab_count = 0
         self.tab_dict = dict([])
@@ -118,8 +122,16 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_scale.setGeometry(self.width-56, 4, 20, 20)
         self.button_roll.setGeometry(self.width-79, 4, 20, 20)
         self.button_menu.setGeometry(self.width-102, 4, 20, 20)
-        self.button_menu.label_menu.setGeometry(self.width-272, 26, 190, 200)
+        self.button_menu.label_menu.setGeometry(self.width-245, 26, 160, 100)
+        # self.button_download.label_menu.setGeometry(self.width-210, 55, 200, 600)
         self.button_download.setGeometry(self.width-38, 25, 28, 28)
         self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
         self.setGeometry(0, 0, self.width, self.height)
         self.transformed.emit()
+
+    def setTheme(self, main, tab_theme_selected, tab_theme_unselected, tab_theme_unselected_light):
+        self.setStyleSheet(main)
+        self.tab_theme_selected = tab_theme_selected
+        self.tab_theme_unselected = tab_theme_unselected
+        self.tab_theme_unselected_light = tab_theme_unselected_light
+        self.refresh()

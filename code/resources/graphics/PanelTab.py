@@ -16,7 +16,6 @@ class PanelTab(QtWidgets.QLabel):
         self.pos_x, self.pos_y = self.x, self.y
         self.width, self.height = 140, 25
         self.setGeometry(self.x, self.y, self.width, self.height)
-        self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
         self.title = QtWidgets.QLabel(self)
         self.title.setGeometry(25, 0, 130, 25)
         font = self.title.font(); font.setPixelSize(13); self.title.setFont(font)
@@ -40,14 +39,14 @@ class PanelTab(QtWidgets.QLabel):
 
     def setSelected(self):
         self.selected = True
-        self.setStyleSheet(r"QLabel{ background-color : rgb(23, 114, 69);}")
+        self.setStyleSheet(self.parent.tab_theme_selected)
         self.title.setStyleSheet(r"QLabel{ color : white; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_white.png'))
         self.button_tab_close.setVisible(True)
 
     def setUnselected(self):
         self.selected = False
-        self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
+        self.setStyleSheet(self.parent.tab_theme_unselected)
         self.title.setStyleSheet(r"QLabel{ color: black; }")
         self.button_tab_close.setPixmap(QtGui.QPixmap('resources//images//button_tab_close_black.png'))
         self.button_tab_close.setVisible(False)
@@ -69,14 +68,14 @@ class PanelTab(QtWidgets.QLabel):
         if self.selected:
             pass
         else:
-            self.setStyleSheet(r"QLabel{ background-color : rgb(142, 230, 155)}")
+            self.setStyleSheet(self.parent.tab_theme_unselected_light)
             self.button_tab_close.setVisible(True)
 
     def leaveEvent(self, event):
         if self.selected:
             pass
         else:
-            self.setStyleSheet(r"QLabel{ background-color : background-color: rgb(119, 221, 119);}")
+            self.setStyleSheet(self.parent.tab_theme_unselected)
             self.button_tab_close.setVisible(False)
 
     def mousePressEvent(self, event):

@@ -21,8 +21,8 @@ class Ui_Main:
         self.label_panel.button_scale = PushedLabel(Main, 'resources//images//button_scale.png', 1029, 4, 20, 20)
         self.label_panel.button_roll = PushedLabel(Main, 'resources//images//button_roll.png', 1006, 4, 20, 20)
         self.label_panel.button_menu = PushedLabel(Main, 'resources//images//button_menu.png', 978, 4, 20, 20)
-        self.label_panel.button_menu.label_menu = MenuLabel(Main, 840, 26, 160, 200)
-        self.label_panel.button_download.label_menu = MenuLabel(Main, 880, 55, 200, 600)
+        self.label_panel.button_menu.label_menu = MenuLabel(Main, 840, 26, 160, 100)
+        # self.label_panel.button_download.label_menu = MenuLabel(Main, 880, 55, 200, 600)
 
         self.connecting()
 
@@ -31,7 +31,7 @@ class Ui_Main:
         self.label_panel.button_back.clicked.connect(self.backHandler)
         self.label_panel.button_forward.clicked.connect(self.forwardHandler)
         self.label_panel.button_menu.clicked.connect(self.menuHandler)
-        self.label_panel.button_download.clicked.connect(self.downloadHandler)
+        # self.label_panel.button_download.clicked.connect(self.downloadHandler)
 
     def reloadHandler(self):
         self.label_panel.current_tab.scene.page.action(self.label_panel.current_tab.scene.page.Reload).trigger()
