@@ -12,7 +12,7 @@ class SearchLine(QtWidgets.QLabel):
         self.line_edit = SearchLineEdit(self)
 
     def load(self):
-        self.parent.ui.label_panel.load_current_page()
+        self.parent.load_current_page()
 
 
 class SearchLineEdit(QtWidgets.QLineEdit):
@@ -31,5 +31,10 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Return:
             self.parent.load()
+            self.parent.parent.current_tab.current_text = self.text()
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
+
+    def mousePressEvent(self, event):
+        print('here we go!')
+        super(SearchLineEdit, self).mousePressEvent(event)

@@ -3,7 +3,6 @@ import sys; sys.path += ['E://0//git//python-gachi-browser//code//resources//gra
 from PanelHoldLabel import *
 from PanelTab import *
 from PushedLabel import *
-from SearchLineEdit import *
 from MenuLabel import *
 
 
@@ -12,7 +11,6 @@ class Ui_Main:
     def setupUi(self, Main):
         self.parent = Main
         self.label_panel = PanelHoldLabel(Main, Main.scene)
-        self.label_panel.edit_searchLine = SearchLine(Main)
         self.label_panel.button_back = PushedLabel(Main, 'resources//images//left_arrow.png', 2, 31, 28, 20) 
         self.label_panel.button_forward = PushedLabel(Main, 'resources//images//right_arrow.png', 30, 31, 28, 20)
         self.label_panel.button_reload = PushedLabel(Main, 'resources//images//arrow_reload.png', 57, 30, 28, 20)

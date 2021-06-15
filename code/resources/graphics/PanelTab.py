@@ -23,6 +23,7 @@ class PanelTab(QtWidgets.QLabel):
         self.icon.setGeometry(5, 3, 18, 18)
         self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 115, 0, 25, 25)
         self.button_tab_close.clicked.connect(self.parent.closeTab)
+        self.current_text = ''
         self.setAttribute(QtCore.Qt.WA_Hover)
         self.connecting()
 

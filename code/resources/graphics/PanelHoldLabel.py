@@ -4,6 +4,7 @@ from MainPageView import *
 from PushedLabel import *
 from PanelTab import *
 from PageScene import *
+from SearchLineEdit import *
 
 class PanelHoldLabel(QtWidgets.QLabel):
 
@@ -26,6 +27,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_lst = []
         self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 0, 0, 25, 25)
         self.button_add_tab.clicked.connect(self.addTab)
+        self.edit_searchLine = SearchLine(self)
         self.refresh()
         self.connecting()
         self.addTab()
@@ -47,6 +49,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
         self.refresh()
+        self.edit_searchLine.line_edit.setText(self.current_tab.current_text)
         tab.raise_()
 
     def closeTab(self):
