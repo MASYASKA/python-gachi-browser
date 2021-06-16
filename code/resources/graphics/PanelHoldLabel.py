@@ -98,8 +98,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
         scene = self.current_tab.scene
         self.current_tab.setGeometry(0, 0, self.parent.width, self.parent.height)
 
-    def load_current_page(self):
-        url = QtCore.QUrl(f'https://www.google.com/search?q={self.edit_searchLine.line_edit.text()}')
+    def load_current_page(self, turn):
+        if turn:
+            url = QtCore.QUrl(self.edit_searchLine.line_edit.text())
+        else:
+            url = QtCore.QUrl(f'https://www.google.com/search?q={self.edit_searchLine.line_edit.text()}')
         self.current_tab.scene.engine.load(url)
 
     # events

@@ -1,6 +1,9 @@
 from PyQt5 import QtWidgets, QtCore
+from PushedLabel import *
 
 class SearchLine(QtWidgets.QLabel):
+
+    transformed = QtCore.pyqtSignal()
 
     def __init__(self, parent):
         super(SearchLine, self).__init__(parent=parent)
@@ -10,9 +13,29 @@ class SearchLine(QtWidgets.QLabel):
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet("QLabel{border-radius: 3px; background-color: white;}")
         self.line_edit = SearchLineEdit(self)
+        self.button_search = PushedLabel(self, 'resources//images//magnifer.png', 0, 0, 20, 20)
+        self.searchSite = False
+
+        self.connecting()
 
     def load(self):
-        self.parent.load_current_page()
+        self.parent.load_current_page(self.searchSite)
+
+    def changeSearch(self):
+        if self.searchSite:
+            self.button_search.setPixmap(QtGui.QPixmap('resources//images//magnifer.png'))
+            self.searchSite = False
+        else:
+            self.button_search.setPixmap(QtGui.QPixmap('resources//images//planet.png'))
+            self.searchSite = True
+
+    # required functions
+
+    def connecting(self):
+        self.button_search.clicked.connect(self.changeSearch)
+
+    def transform(self):
+        pass
 
 
 class SearchLineEdit(QtWidgets.QLineEdit):
@@ -20,7 +43,7 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super(SearchLineEdit, self).__init__(parent=parent)
         self.parent = parent
-        self.setGeometry(QtCore.QRect(15, 1, 920, 18))
+        self.setGeometry(QtCore.QRect(22, 1, 913, 18))
         self.setPlaceholderText("Enter request or address")
         self.setStyleSheet("QLineEdit{background-color: white; border: white;}")
         font = self.font(); font.setPointSize(10)
