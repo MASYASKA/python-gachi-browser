@@ -22,7 +22,7 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         self.parent = parent
         self.setGeometry(QtCore.QRect(15, 1, 920, 18))
         self.setPlaceholderText("Enter request or address")
-        self.setStyleSheet("QLineEdit{border: white;}")
+        self.setStyleSheet("QLineEdit{background-color: white; border: white;}")
         font = self.font(); font.setPointSize(10)
         self.setFont(font)
 
@@ -32,9 +32,16 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         if event.key() == QtCore.Qt.Key_Return:
             self.parent.load()
             self.parent.parent.current_tab.current_text = self.text()
+            self.setTheme()
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
 
+    def setTheme(self):
+            self.parent.setStyleSheet("QLabel{" + self.parent.parent.tab_theme_unselected_light +\
+                "border-radius:3px;" + "}")
+            self.setStyleSheet("QLineEdit{" + self.parent.parent.tab_theme_unselected_light + "border-radius: 20px;" + "}")
+
     def mousePressEvent(self, event):
-        print('here we go!')
+        self.setStyleSheet("QLineEdit{border: white;}")
+        self.parent.setStyleSheet("QLabel{border-radius: 3px; background-color: white;}")
         super(SearchLineEdit, self).mousePressEvent(event)

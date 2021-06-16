@@ -47,22 +47,22 @@ class MenuLabel(QtWidgets.QLabel):
 
 
     def setGreenTheme(self):
-        self.parent.ui.label_panel.setTheme(main="QLabel{background-color: rgb(119, 221, 119);}",
-            tab_theme_selected="QLabel{ background-color : rgb(23, 114, 69);}",
-            tab_theme_unselected="QLabel{ background-color : background-color: rgb(119, 221, 119);}",
-            tab_theme_unselected_light="QLabel{ background-color : rgb(142, 230, 155)}")
+        self.parent.ui.label_panel.setTheme(main="background-color: rgb(119, 221, 119);",
+            tab_theme_selected="background-color : rgb(23, 114, 69);",
+            tab_theme_unselected="background-color : background-color: rgb(119, 221, 119);",
+            tab_theme_unselected_light="background-color : rgb(142, 230, 155);")
 
     def setPurpleTheme(self):
-        self.parent.ui.label_panel.setTheme(main="QLabel{background-color: rgb(152, 40, 158);}",
-            tab_theme_selected="QLabel{background-color: rgb(255, 115, 0);}", 
-            tab_theme_unselected="QLabel{background-color: rgb(152, 40, 158);}",
-            tab_theme_unselected_light="QLabel{background-color: rgb(195, 49, 194);}")
+        self.parent.ui.label_panel.setTheme(main="background-color: rgb(152, 40, 158);",
+            tab_theme_selected="background-color: rgb(255, 115, 0);", 
+            tab_theme_unselected="background-color: rgb(152, 40, 158);",
+            tab_theme_unselected_light="background-color: rgb(195, 49, 194);")
 
     def setVioletTheme(self):
-        self.parent.ui.label_panel.setTheme(main="QLabel{background-color: rgb(35, 0, 189);}",
-            tab_theme_selected="QLabel{background-color: rgb(5, 165, 245);}", 
-            tab_theme_unselected="QLabel{background-color: rgb(35, 0, 189);}",
-            tab_theme_unselected_light="QLabel{background-color: rgb(59, 51, 181);}")
+        self.parent.ui.label_panel.setTheme(main="background-color: rgb(35, 0, 189);",
+            tab_theme_selected="background-color: rgb(5, 165, 245);", 
+            tab_theme_unselected="background-color: rgb(35, 0, 189);",
+            tab_theme_unselected_light="background-color: rgb(59, 51, 181);")
 
 
 

@@ -15,12 +15,12 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.parent = parent
         self.scene = scene
         self.width, self.height = parent.width+10, 55
-        self.theme = "QLabel{background-color: rgb(119, 221, 119);}"
-        self.tab_theme_selected = "QLabel{ background-color : rgb(23, 114, 69);}"
-        self.tab_theme_unselected = "QLabel{ background-color : background-color: rgb(119, 221, 119);}"
-        self.tab_theme_unselected_light = "QLabel{ background-color : rgb(142, 230, 155)}"
+        self.theme = "background-color: rgb(119, 221, 119);"
+        self.tab_theme_selected = "background-color : rgb(23, 114, 69);"
+        self.tab_theme_unselected = "background-color: rgb(119, 221, 119);"
+        self.tab_theme_unselected_light = "background-color : rgb(142, 230, 155);"
         self.setGeometry(-1, -1, self.width, self.height)
-        self.setStyleSheet(self.theme)
+        self.setStyleSheet("QLabel{" + self.theme + "}")
         self.view_current_page = ViewMainPage(parent)
         self.tab_count = 0
         self.tab_dict = dict([])
@@ -134,8 +134,9 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.transformed.emit()
 
     def setTheme(self, main, tab_theme_selected, tab_theme_unselected, tab_theme_unselected_light):
-        self.setStyleSheet(main)
+        self.setStyleSheet("QLabel{" + main + "}")
         self.tab_theme_selected = tab_theme_selected
         self.tab_theme_unselected = tab_theme_unselected
         self.tab_theme_unselected_light = tab_theme_unselected_light
+        self.edit_searchLine.line_edit.setTheme()
         self.refresh()
