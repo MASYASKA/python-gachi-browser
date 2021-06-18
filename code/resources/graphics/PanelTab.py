@@ -63,6 +63,7 @@ class PanelTab(QtWidgets.QLabel):
         except:
             pass
 
+
     # events
 
     def enterEvent(self, event):

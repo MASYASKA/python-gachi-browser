@@ -15,10 +15,10 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.parent = parent
         self.scene = scene
         self.width, self.height = parent.width+10, 55
-        self.theme = "background-color: rgb(119, 221, 119);"
-        self.tab_theme_selected = "background-color : rgb(23, 114, 69);"
-        self.tab_theme_unselected = "background-color: rgb(119, 221, 119);"
-        self.tab_theme_unselected_light = "background-color : rgb(142, 230, 155);"
+        self.theme = "background-color: rgb(230, 230, 230);"
+        self.tab_theme_selected = "background-color : rgb(143, 143, 143);"
+        self.tab_theme_unselected = "background-color: rgb(230, 230, 230);"
+        self.tab_theme_unselected_light = "background-color : rgb(209, 209, 209);"
         self.setGeometry(-1, -1, self.width, self.height)
         self.setStyleSheet("QLabel{" + self.theme + "}")
         self.view_current_page = ViewMainPage(parent)
@@ -29,8 +29,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_add_tab.clicked.connect(self.addTab)
         self.edit_searchLine = SearchLine(self)
         self.refresh()
+        # self.addTab() # нельзя добавлять таб изначально, потому что панель не инициализирована
         self.connecting()
-        self.addTab()
 
     # tabs
 
@@ -49,7 +49,10 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
         self.refresh()
-        self.edit_searchLine.line_edit.setText(self.current_tab.current_text)
+        self.edit_searchLine.line_edit.setEditTitle()
+        self.edit_searchLine.line_edit_title.setVisible(True)
+        self.edit_searchLine.line_edit.setText('')
+        self.edit_searchLine.line_edit.setPlaceholderText("")
         tab.raise_()
 
     def closeTab(self):
@@ -129,10 +132,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_roll.setGeometry(self.width-79, 4, 20, 20)
         self.button_menu.setGeometry(self.width-102, 4, 20, 20)
         self.button_menu.label_menu.setGeometry(self.width-245, self.button_menu.label_menu.y, 
-            self.button_menu.label_menu.width, self.button_menu.label_menu.height)
+                        self.button_menu.label_menu.width, self.button_menu.label_menu.height)
         # self.button_download.label_menu.setGeometry(self.width-210, 55, 200, 600)
         self.button_download.setGeometry(self.width-38, 25, 28, 28)
         self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
+        self.edit_searchLine.x, self.edit_searchLine.y, self.edit_searchLine.width, self.edit_searchLine.height = 94, 32, self.width-140, 18
         self.setGeometry(0, 0, self.width, self.height)
         self.transformed.emit()
 

@@ -19,9 +19,11 @@ class MenuLabel(QtWidgets.QLabel):
         self.button_greenTheme = PopupMenuLabel(self, 'green theme')
         self.button_purpleTheme = PopupMenuLabel(self, 'purple theme')
         self.button_violetTheme = PopupMenuLabel(self, 'violet theme')
+        self.button_cementTheme = PopupMenuLabel(self, 'cement theme')
         self.addButton(self.button_greenTheme)
         self.addButton(self.button_purpleTheme)
         self.addButton(self.button_violetTheme)
+        self.addButton(self.button_cementTheme)
 
         self.connecting()
 
@@ -29,9 +31,11 @@ class MenuLabel(QtWidgets.QLabel):
         if self.visible:
             self.setVisible(False)
             self.visible = False
+            self.setFocus(False)
         else:
             self.setVisible(True)
             self.visible = True
+            self.setFocus(True)
 
     def addButton(self, button):
         button.setGeometry(self.cx, self.cy, self.cwidth, self.cheight)
@@ -39,11 +43,6 @@ class MenuLabel(QtWidgets.QLabel):
         self.cy += self.cheight
         self.height += self.cheight
         self.setGeometry(self.x, self.y, self.width, self.height)
-
-    def connecting(self):
-        self.button_greenTheme.clicked.connect(self.setGreenTheme)
-        self.button_purpleTheme.clicked.connect(self.setPurpleTheme)
-        self.button_violetTheme.clicked.connect(self.setVioletTheme)
 
 
     def setGreenTheme(self):
@@ -64,6 +63,25 @@ class MenuLabel(QtWidgets.QLabel):
             tab_theme_unselected="background-color: rgb(35, 0, 189);",
             tab_theme_unselected_light="background-color: rgb(59, 51, 181);")
 
+    def setCementTheme(self):
+        self.parent.ui.label_panel.setTheme(main='background-color: rgb(230, 230, 230);',
+            tab_theme_selected='background-color: rgb(143, 143, 143);',
+            tab_theme_unselected='background-color: rgb(230, 230, 230);',
+            tab_theme_unselected_light='background-color: rgb(209, 209, 209);')
+
+    # events
+
+    def focusOutEvent(self, event):
+        self.setMenu()
+
+    # required functions
+
+    def connecting(self):
+        self.button_greenTheme.clicked.connect(self.setGreenTheme)
+        self.button_purpleTheme.clicked.connect(self.setPurpleTheme)
+        self.button_violetTheme.clicked.connect(self.setVioletTheme)
+        self.button_cementTheme.clicked.connect(self.setCementTheme)
+
 
 
 class PopupMenuLabel(PushedLabel):
@@ -75,6 +93,7 @@ class PopupMenuLabel(PushedLabel):
         self.label_text.setGeometry(15, 5, self.width-25, self.height-5)
         self.label_text.setText(text)
 
+    # events
 
     def enterEvent(self, event):
         self.setStyleSheet("QLabel{background-color: rgb(163, 163, 163);}")

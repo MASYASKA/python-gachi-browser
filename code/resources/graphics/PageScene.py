@@ -14,7 +14,6 @@ class PageScene(QtWidgets.QGraphicsScene):
         self.engine = ViewEnginePage(self)
         self.engine.load(QtCore.QUrl(url))
         self.page = self.engine.page()
-        self.title = self.page.title()
         self.setSceneRect(0, 54, self.width, self.height)
         self.addWidget(self.engine)
         self.connecting()
@@ -30,11 +29,13 @@ class PageScene(QtWidgets.QGraphicsScene):
     def action_page_reload(self):
         self.changed.emit()
 
+
     # required funcions
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
         self.engine.page().loadFinished.connect(self.tab.setPageName)
+        self.engine.page().loadFinished.connect(self.parent.parent.ui.label_panel.edit_searchLine.line_edit.setEditTitle)
 
     def transform(self):
         print('PageScene here!')
