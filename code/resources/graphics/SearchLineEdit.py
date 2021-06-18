@@ -55,7 +55,10 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         font = self.font(); font.setPointSize(10)
 
     def setEditTitle(self):
-        self.parent.line_edit_title.setText(self.parent.parent.current_tab.title.text())
+        try:
+            self.parent.line_edit_title.setText(self.parent.parent.current_tab.title.text())
+        except RuntimeError:
+            pass
 
     def setTheme(self):
             self.parent.setStyleSheet("QLabel{" + self.parent.parent.tab_theme_unselected_light +\
@@ -91,10 +94,12 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def focusInEvent(self, event):
         self.parent.line_edit_title.visible = False
         self.parent.line_edit_title.setVisible(self.parent.line_edit_title.visible)
-        self.setText(self.parent.parent.current_tab.current_text)
+        try:
+            self.setText(self.parent.parent.current_tab.current_text)
+        except AttributeError:
+            pass
         self.setPlaceholderText("Enter request or address")
         super(SearchLineEdit, self).focusInEvent(event)
-
 
 class LineEditTitle(QtWidgets.QLabel):
 
@@ -109,7 +114,6 @@ class LineEditTitle(QtWidgets.QLabel):
         self.parent.parent.transformed.connect(self.transform)
 
     def transform(self):
-        print('me here!!!!!!!!!!!!')
         self.x, self.y, self.width, self.height = self.parent.width/2-((self.parent.width/7)/2), 0, self.parent.width/7, self.parent.height
         self.setGeometry(self.x, self.y, self.width, self.height)
 
