@@ -22,12 +22,15 @@ class StartPageScene(QtWidgets.QGraphicsScene):
         self.addBookmark('https://znanija.com/')
         self.addBookmark('https://www.youtube.com/')
         self.addBookmark('https://www.google.com/')
-        self.addBookmark('e э э')
-        self.addBookmark('e э э')
-        self.addBookmark('e э э')
-        self.addBookmark('e э э')
-        self.addBookmark('e э э')
-
+        self.addBookmark('https://stackoverflow.com/')
+        self.addBookmark('https://github.com/')
+        self.addBookmark('https://pypi.org/')
+        self.addBookmark('https://znanija.com/')
+        self.addBookmark('https://www.youtube.com/')
+        self.addBookmark('https://www.google.com/')
+        self.addBookmark('https://stackoverflow.com/')
+        self.addBookmark('https://github.com/')
+        self.addBookmark('https://pypi.org/')
 
         self.connecting()
 
@@ -63,9 +66,14 @@ class BookmarkLabel(QtWidgets.QLabel):
         super(BookmarkLabel, self).__init__()
         self.parent = parent
         self.url = url
-        self.setText(self.url)
+        self.layout = QtWidgets.QGridLayout()
+        self.title = QtWidgets.QLabel(self)
+        self.title.setText(self.url)
+        self.layout.addWidget(self.title)
+        self.layout.setAlignment(QtCore.Qt.AlignCenter)
+        self.setLayout(self.layout)
         self.setStyleSheet("QLabel{background-color: yellow; border-radius: 5px;}")
-        self.setGeometry(250, 250, 100, 100)
 
     def mousePressEvent(self, event):
         self.parent.parent.parent.ui.label_panel.addTab(self.url)
+        self.parent.parent.parent.ui.label_panel.closeStartPage()

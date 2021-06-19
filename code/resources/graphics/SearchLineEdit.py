@@ -56,9 +56,12 @@ class SearchLineEdit(QtWidgets.QLineEdit):
 
     def setEditTitle(self):
         try:
-            self.parent.line_edit_title.setText(self.parent.parent.current_tab.title.text())
-        except RuntimeError:
-            pass
+            try:
+                self.parent.line_edit_title.setText(self.parent.parent.current_tab.title.text())
+            except RuntimeError:
+                pass
+        except AttributeError:
+            self.parent.line_edit_title.setText(self.parent.parent.tab_stack[-1].title.text())
 
     def setTheme(self):
             self.parent.setStyleSheet("QLabel{" + self.parent.parent.tab_theme_unselected_light +\

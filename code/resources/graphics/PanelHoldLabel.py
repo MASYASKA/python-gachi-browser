@@ -13,24 +13,28 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     def __init__(self, parent, scene):
         super(PanelHoldLabel, self).__init__(parent=parent)
+        # params
         self.parent = parent
         self.scene = scene
+        self.tab_count = 0
+        self.tab_dict = dict([])
+        self.tab_lst = []
+        self.tab_stack = []
+        self.is_start_page = False
         self.width, self.height = parent.width+10, 55
+        # style
         self.theme = "background-color: rgb(230, 230, 230);"
         self.tab_theme_selected = "background-color : rgb(143, 143, 143);"
         self.tab_theme_unselected = "background-color: rgb(230, 230, 230);"
         self.tab_theme_unselected_light = "background-color : rgb(209, 209, 209);"
-        self.setGeometry(-1, -1, self.width, self.height)
-        self.setStyleSheet("QLabel{" + self.theme + "}")
+        # items
         self.view_current_page = ViewMainPage(parent)
         self.start_page = StartPageScene(self.view_current_page)
-        self.tab_count = 0
-        self.tab_dict = dict([])
-        self.tab_lst = []
-        self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 0, 0, 25, 25)
-        # self.button_add_tab.clicked.connect(self.addTab)
-        self.button_add_tab.clicked.connect(self.openStartPage)
+        self.button_setStartPage = PushedLabel(self, 'resources//images//button_open_start_page.png', 0, 0, 25, 25)
         self.edit_searchLine = SearchLine(self)
+        # calls
+        self.setGeometry(-1, -1, self.width, self.height)
+        self.setStyleSheet("QLabel{" + self.theme + "}")
         self.refresh()
         # self.addTab() # нельзя добавлять таб изначально, потому что панель не инициализирована
         self.connecting()
@@ -51,11 +55,18 @@ class PanelHoldLabel(QtWidgets.QLabel):
     def openTab(self, tab):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
+        try:
+            index = self.tab_stack.index(tab)
+            del self.tab_stack[index]
+            self.tab_stack += [tab]
+        except ValueError:
+            self.tab_stack += [tab]
         self.refresh()
         self.edit_searchLine.line_edit.setEditTitle()
         self.edit_searchLine.line_edit_title.setVisible(True)
         self.edit_searchLine.line_edit.setText('')
         self.edit_searchLine.line_edit.setPlaceholderText("")
+        self.closeStartPage()
         tab.raise_()
 
     def closeTab(self):
@@ -67,6 +78,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
         tab.delete()
         self.tab_count -= 1
         self.refresh()
+        self.tab_stack.pop(self.tab_stack.index(tab))
+        try:
+            self.openTab(self.tab_stack[-1]) # if it is last tab
+        except:
+            self.setStartPage()
 
     def moveTabForward(self, tab):
         try:
@@ -88,8 +104,29 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     # start page
 
+    def setStartPage(self):
+        if self.is_start_page:
+            self.closeStartPage()
+        else:
+            self.openStartPage()
+
     def openStartPage(self):
         self.view_current_page.setScene(self.start_page)
+        self.button_setStartPage.setPixmap(QtGui.QPixmap('resources//images//button_close_start_page.png'))
+        self.button_setStartPage.setStyleSheet("QLabel{background-color:" + self.tab_theme_unselected_light +"}")
+        self.is_start_page = True
+        self.current_tab = None # для того чтобы последний выбранный таб не подсвечивался
+        self.refresh()
+
+    def closeStartPage(self):
+        self.button_setStartPage.setPixmap(QtGui.QPixmap('resources//images//button_open_start_page.png'))
+        self.button_setStartPage.setStyleSheet("QLabel{}")
+        self.is_start_page = False
+        try:
+            self.openTab(self.tab_stack[-1])
+        except:
+            # self.parent.parent.parent.close()
+            pass
 
     # helper functions
 
@@ -102,8 +139,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
                 tab.setUnselected()
             tab.setGeometry(pos_x+2 , pos_y, tab.width, tab.height)
             pos_x += 140
-        self.button_add_tab.setGeometry(pos_x, 0, 25, 25)
-        self.button_add_tab.x = pos_x
+        self.button_setStartPage.setGeometry(pos_x, 0, 25, 25)
+        self.button_setStartPage.x = pos_x
 
     def setSceneSize(self):
         scene = self.current_tab.scene
@@ -139,6 +176,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
+        self.button_setStartPage.clicked.connect(self.setStartPage)
 
     def transform(self):
         print('PanelHoldLabel here!')
