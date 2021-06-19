@@ -5,6 +5,7 @@ from PushedLabel import *
 from PanelTab import *
 from PageScene import *
 from SearchLineEdit import *
+from StartPageScene import *
 
 class PanelHoldLabel(QtWidgets.QLabel):
 
@@ -22,11 +23,13 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.setGeometry(-1, -1, self.width, self.height)
         self.setStyleSheet("QLabel{" + self.theme + "}")
         self.view_current_page = ViewMainPage(parent)
+        self.start_page = StartPageScene(self.view_current_page)
         self.tab_count = 0
         self.tab_dict = dict([])
         self.tab_lst = []
         self.button_add_tab = PushedLabel(self, 'resources//images//button_add_tab.png', 0, 0, 25, 25)
-        self.button_add_tab.clicked.connect(self.addTab)
+        # self.button_add_tab.clicked.connect(self.addTab)
+        self.button_add_tab.clicked.connect(self.openStartPage)
         self.edit_searchLine = SearchLine(self)
         self.refresh()
         # self.addTab() # нельзя добавлять таб изначально, потому что панель не инициализирована
@@ -83,6 +86,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
         except:
             pass
 
+    # start page
+
+    def openStartPage(self):
+        self.view_current_page.setScene(self.start_page)
+
     # helper functions
 
     def refresh(self):
@@ -107,8 +115,12 @@ class PanelHoldLabel(QtWidgets.QLabel):
         else:
             url = QtCore.QUrl(f'https://www.google.com/search?q={self.edit_searchLine.line_edit.text()}')
         try:
-            self.current_tab.scene.engine.load(url)
-        except AttributeError:
+            try:
+                self.current_tab.scene.engine.load(url)
+            except AttributeError:
+                self.addTab()
+                self.current_tab.scene.engine.load(url)
+        except RuntimeError:
             self.addTab()
             self.current_tab.scene.engine.load(url)
 
@@ -150,4 +162,5 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_theme_unselected = tab_theme_unselected
         self.tab_theme_unselected_light = tab_theme_unselected_light
         self.edit_searchLine.line_edit.setTheme()
+        self.start_page.setTheme()
         self.refresh()
