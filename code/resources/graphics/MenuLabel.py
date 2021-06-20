@@ -72,7 +72,8 @@ class MenuLabel(QtWidgets.QLabel):
     # events
 
     def focusOutEvent(self, event):
-        self.setMenu()
+        self.visible = False
+        self.setVisible(self.visible)
 
     # required functions
 

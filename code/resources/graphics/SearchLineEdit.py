@@ -48,7 +48,10 @@ class SearchLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super(SearchLineEdit, self).__init__(parent=parent)
         self.parent = parent
+        self.panel = parent.parent
         self.x, self.y, self.width, self.height  = 22, 1, 913, 18
+
+
         self.setGeometry(QtCore.QRect(self.x, self.y, self.width, self.height))
         self.setPlaceholderText("Enter request or address")
         self.setStyleSheet("QLineEdit{background-color: white; border: white;}")
@@ -74,7 +77,7 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         if event.key() == QtCore.Qt.Key_Return:
             self.parent.load()
             self.parent.parent.current_tab.current_text = self.text()
-            self.setTheme()
+            self.setTheme(self.panel)
         else:
             super(SearchLineEdit, self).keyPressEvent(event)
 
@@ -85,10 +88,13 @@ class SearchLineEdit(QtWidgets.QLineEdit):
 
 
     def focusOutEvent(self, event):
-        self.setTheme()
+        self.setTheme(self.panel)
         self.parent.line_edit_title.visible = True
         self.parent.line_edit_title.setVisible(self.parent.line_edit_title.visible)
-        self.parent.parent.current_tab.current_text = self.text()
+        try:
+            self.parent.parent.current_tab.current_text = self.text()
+        except AttributeError:
+            pass
         self.setText('')
         self.setPlaceholderText("")
         super(SearchLineEdit, self).focusOutEvent(event)

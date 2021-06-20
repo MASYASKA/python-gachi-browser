@@ -29,7 +29,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_theme_unselected_light = "background-color : rgb(209, 209, 209);"
         # items
         self.view_current_page = ViewMainPage(parent)
-        self.start_page = StartPageScene(self.view_current_page)
+        self.start_page = StartPageScene(self.view_current_page, self)
         self.button_setStartPage = PushedLabel(self, 'resources//images//button_open_start_page.png', 0, 0, 25, 25)
         self.edit_searchLine = SearchLine(self)
         # calls
@@ -117,6 +117,8 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.button_setStartPage.setStyleSheet("QLabel{background-color:" + self.tab_theme_unselected_light +"}")
         self.is_start_page = True
         self.current_tab = None # для того чтобы последний выбранный таб не подсвечивался
+        self.edit_searchLine.line_edit.setText("")
+        self.edit_searchLine.line_edit_title.setText("")
         self.refresh()
 
     def closeStartPage(self):
