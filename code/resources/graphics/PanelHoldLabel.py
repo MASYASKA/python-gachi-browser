@@ -36,6 +36,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.setGeometry(-1, -1, self.width, self.height)
         self.setStyleSheet("QLabel{" + self.theme + "}")
         self.refresh()
+        self.setTheme(self.theme, self.tab_theme_selected, self.tab_theme_unselected, self.tab_theme_unselected_light)
         # self.addTab() # нельзя добавлять таб изначально, потому что панель не инициализирована
         self.connecting()
 
@@ -199,6 +200,6 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_theme_selected = tab_theme_selected
         self.tab_theme_unselected = tab_theme_unselected
         self.tab_theme_unselected_light = tab_theme_unselected_light
-        self.edit_searchLine.line_edit.setTheme()
-        self.start_page.setTheme()
+        self.edit_searchLine.line_edit.setTheme(self)
+        self.start_page.widget.setTheme(self)
         self.refresh()

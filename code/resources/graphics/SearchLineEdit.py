@@ -63,10 +63,10 @@ class SearchLineEdit(QtWidgets.QLineEdit):
         except AttributeError:
             self.parent.line_edit_title.setText(self.parent.parent.tab_stack[-1].title.text())
 
-    def setTheme(self):
-            self.parent.setStyleSheet("QLabel{" + self.parent.parent.tab_theme_unselected_light +\
+    def setTheme(self, main):
+            self.parent.setStyleSheet("QLabel{" + main.tab_theme_unselected_light +\
                 "border-radius:3px;" + "}")
-            self.setStyleSheet("QLineEdit{" + self.parent.parent.tab_theme_unselected_light + "border-radius: 20px;" + "}")
+            self.setStyleSheet("QLineEdit{" + main.tab_theme_unselected_light + "border-radius: 20px;" + "}")
 
     # events
  
