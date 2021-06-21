@@ -140,24 +140,26 @@ class PanelHoldLabel(QtWidgets.QLabel):
         pos_x, pos_y = 0, 0
         suma = 0
         width = 140
+        # print(self.panel_tab_width)
+        # print(f'panel_tab_width = {self.panel_tab_width}, tab.width = {tab.width} width = {width}')
+        try:
+            var_width = self.panel_tab_width / len(self.tab_lst)
+        except ZeroDivisionError:
+            var_width = 140
+        if var_width < 140:
+            width = var_width
         for tab in self.tab_lst:
-            suma += tab.width
-        if suma >= self.panel_tab_width:
-            width = self.panel_tab_width / len(self.tab_lst)
-            # print(width)
-        # if sum([tab.width for tab in self.tab_lst]) >= self.panel_tab_width:
-        #     width = self.panel_tab_width / tab.width
-        #     print(width)
-        for tab in self.tab_lst:
-            # tab.width = width
+            tab.width = width
             if tab is self.current_tab:
                 tab.setSelected()
             else:
                 tab.setUnselected()
             tab.setGeometry(pos_x+2 , pos_y, tab.width, tab.height)
+            tab.transform()
             pos_x += width
-        print(pos_x)
-        self.button_setStartPage.setGeometry(pos_x, 0, 25, 25)
+        for index in range(len(self.tab_lst)):
+            self.tab_lst[index].x = width*index
+        self.button_setStartPage.setGeometry(pos_x, 0, 25, 25) # передвигать крестик
         self.button_setStartPage.x = pos_x
 
     def setSceneSize(self):
@@ -210,8 +212,9 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
         self.edit_searchLine.x, self.edit_searchLine.y, self.edit_searchLine.width, self.edit_searchLine.height = 94, 32, self.width-140, 18
         self.setGeometry(0, 0, self.width, self.height)
-        self.tab_width = self.width-112
+        self.panel_tab_width = self.width-112-25
         self.transformed.emit()
+        self.refresh()
 
     def setTheme(self, main, tab_theme_selected, tab_theme_unselected, tab_theme_unselected_light):
         self.setStyleSheet("QLabel{" + main + "}")

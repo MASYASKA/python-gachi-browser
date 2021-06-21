@@ -98,9 +98,9 @@ class PanelTab(QtWidgets.QLabel):
         self.move_event_coord_x = event.globalPos().x()
         diff_x = self.move_event_coord_x - self.press_event_coord_x
         self.setGeometry(self.x+diff_x, self.y, self.width, self.height)
-        if diff_x > 140:
+        if diff_x > self.width:
             self.parent.moveTabForward(self)
-        if diff_x < -140:
+        if diff_x < -self.width:
             self.parent.moveTabBack(self)
 
     def mouseReleaseEvent(self, event):
@@ -114,4 +114,5 @@ class PanelTab(QtWidgets.QLabel):
 
     def transform(self):
         print('PanelTab here!')
+        self.button_tab_close.setGeometry(self.width-25, 0, 25, 25)
         self.transformed.emit()
