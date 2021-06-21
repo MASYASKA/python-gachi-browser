@@ -4,8 +4,10 @@ class ViewEnginePage(QtWebEngineWidgets.QWebEngineView):
 
     def __init__(self, parent):
         super(ViewEnginePage, self).__init__()
+        # params
         self.parent = parent
         self.width, self.height = parent.width, parent.height
+        # calls
         self.setGeometry(0, 54, self.width, self.height)
         self.connecting()
 

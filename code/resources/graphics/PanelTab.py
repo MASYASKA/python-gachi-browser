@@ -4,28 +4,37 @@ from PushedLabel import *
 class PanelTab(QtWidgets.QLabel):
 
     transformed = QtCore.pyqtSignal()
+    # clicked = QtCore.pyqtSignal()
 
     def __init__(self, parent, count):
         super(PanelTab, self).__init__(parent=parent)
+        # params
+        
         self.parent = parent
         self.id = f'tab_{count}'
         self.position = count
+        self.current_text = ''
         if count > 0: self.x = 140*count
         else: self.x = 0
         self.y = 0
         self.pos_x, self.pos_y = self.x, self.y
         self.width, self.height = 140, 25
-        self.setGeometry(self.x, self.y, self.width, self.height)
+        
+        # items
+
         self.title = QtWidgets.QLabel(self)
-        self.title.setGeometry(25, 0, 130, 25)
-        font = self.title.font(); font.setPixelSize(13); self.title.setFont(font)
         self.icon = QtWidgets.QLabel(self)
-        self.icon.setGeometry(5, 3, 18, 18)
         self.button_tab_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 115, 0, 25, 25)
-        self.button_tab_close.clicked.connect(self.parent.closeTab)
-        self.current_text = ''
+        font = self.title.font()
+        
+        # calls
+
         self.title.setText('Loading...')
+        font.setPixelSize(13); self.title.setFont(font)
+        self.title.setGeometry(25, 0, 130, 25)
+        self.icon.setGeometry(5, 3, 18, 18)
         self.setAttribute(QtCore.Qt.WA_Hover)
+        self.setGeometry(self.x, self.y, self.width, self.height)
         self.connecting()
 
     # helper functions
@@ -101,6 +110,7 @@ class PanelTab(QtWidgets.QLabel):
 
     def connecting(self):
         self.parent.transformed.connect(self.transform)
+        self.button_tab_close.clicked.connect(self.parent.closeTab)
 
     def transform(self):
         print('PanelTab here!')

@@ -7,19 +7,22 @@ class MenuLabel(QtWidgets.QLabel):
 
     def __init__(self, parent, x, y, width, height=0):
         super(MenuLabel, self).__init__(parent=parent)
+        # params
         self.parent = parent
         self.width, self.height = width, height
         self.x, self.y = x, y
         self.cx, self.cy = 0, 0 # cx - children x
         self.cwidth, self.cheight = self.width, 20
-        self.setGeometry(self.x, self.y, self.width, self.height)
-        self.setStyleSheet(r"QLabel{ background-color : white;}")
-        self.setVisible(False)
         self.visible = False
+        # items
         self.button_greenTheme = PopupMenuLabel(self, 'green theme')
         self.button_purpleTheme = PopupMenuLabel(self, 'purple theme')
         self.button_violetTheme = PopupMenuLabel(self, 'violet theme')
         self.button_cementTheme = PopupMenuLabel(self, 'cement theme')
+        # calls
+        self.setGeometry(self.x, self.y, self.width, self.height)
+        self.setStyleSheet(r"QLabel{ background-color : white;}")
+        self.setVisible(False)
         self.addButton(self.button_greenTheme)
         self.addButton(self.button_purpleTheme)
         self.addButton(self.button_violetTheme)

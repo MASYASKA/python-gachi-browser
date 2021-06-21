@@ -8,12 +8,13 @@ class StartPageScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent, panel):
         super(StartPageScene, self).__init__()
+        # params
         self.parent = parent
         self.panel = panel
         self.x, self.y, self.width, self.height = 0, 0,  parent.width-2, parent.height-2
-        
+        # items
         self.widget = SceneMainWidget(self)
-
+        # calls 
         self.setSceneRect(self.x, self.y, self.width, self.height)
         self.addWidget(self.widget)
 

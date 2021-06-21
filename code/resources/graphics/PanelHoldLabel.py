@@ -22,6 +22,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_stack = []
         self.is_start_page = False
         self.width, self.height = parent.width+10, 55
+        self.panel_tab_width = self.width-112-25
         # style
         self.theme = "background-color: rgb(230, 230, 230);"
         self.tab_theme_selected = "background-color : rgb(143, 143, 143);"
@@ -56,18 +57,20 @@ class PanelHoldLabel(QtWidgets.QLabel):
     def openTab(self, tab):
         self.view_current_page.setScene(tab.scene)
         self.current_tab = tab
+        print(self)
         try:
             index = self.tab_stack.index(tab)
             del self.tab_stack[index]
             self.tab_stack += [tab]
         except ValueError:
             self.tab_stack += [tab]
-        self.refresh()
+        # self.refresh() # multiplie calls when adding tab
         self.edit_searchLine.line_edit.setEditTitle()
         self.edit_searchLine.line_edit_title.setVisible(True)
         self.edit_searchLine.line_edit.setText('')
         self.edit_searchLine.line_edit.setPlaceholderText("")
-        self.closeStartPage()
+        # self.closeStartPage() # !!!!!!!!!!!! recursion on openTab
+        self.refresh()
         tab.raise_()
 
     def closeTab(self):
@@ -78,12 +81,12 @@ class PanelHoldLabel(QtWidgets.QLabel):
                 break
         tab.delete()
         self.tab_count -= 1
-        self.refresh()
         self.tab_stack.pop(self.tab_stack.index(tab))
         try:
             self.openTab(self.tab_stack[-1]) # if it is last tab
         except:
             self.setStartPage()
+        self.refresh()
 
     def moveTabForward(self, tab):
         try:
@@ -135,13 +138,25 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     def refresh(self):
         pos_x, pos_y = 0, 0
+        suma = 0
+        width = 140
         for tab in self.tab_lst:
+            suma += tab.width
+        if suma >= self.panel_tab_width:
+            width = self.panel_tab_width / len(self.tab_lst)
+            # print(width)
+        # if sum([tab.width for tab in self.tab_lst]) >= self.panel_tab_width:
+        #     width = self.panel_tab_width / tab.width
+        #     print(width)
+        for tab in self.tab_lst:
+            # tab.width = width
             if tab is self.current_tab:
                 tab.setSelected()
             else:
                 tab.setUnselected()
             tab.setGeometry(pos_x+2 , pos_y, tab.width, tab.height)
-            pos_x += 140
+            pos_x += width
+        print(pos_x)
         self.button_setStartPage.setGeometry(pos_x, 0, 25, 25)
         self.button_setStartPage.x = pos_x
 
@@ -195,6 +210,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.edit_searchLine.setGeometry(94, 32, self.width-140, 18)
         self.edit_searchLine.x, self.edit_searchLine.y, self.edit_searchLine.width, self.edit_searchLine.height = 94, 32, self.width-140, 18
         self.setGeometry(0, 0, self.width, self.height)
+        self.tab_width = self.width-112
         self.transformed.emit()
 
     def setTheme(self, main, tab_theme_selected, tab_theme_unselected, tab_theme_unselected_light):

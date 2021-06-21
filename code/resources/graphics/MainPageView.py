@@ -6,8 +6,10 @@ class ViewMainPage(QtWidgets.QGraphicsView):
 
     def __init__(self, parent):
         super(ViewMainPage, self).__init__(parent=parent)
+        # params
         self.parent = parent
         self.width, self.height = 1080, 666
+        # calls
         self.setGeometry(0, 54, self.width, self.height)
         self.connecting()
 

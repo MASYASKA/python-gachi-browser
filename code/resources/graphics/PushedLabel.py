@@ -7,8 +7,10 @@ class PushedLabel(QtWidgets.QLabel, QtWidgets.QPushButton):
 
     def __init__(self, parent, pixmap, x, y, width, height):
         super(PushedLabel, self).__init__(parent=parent)
+        # params
         self.parent = parent
         self.x, self.y, self.width, self.height = x, y, width, height
+        # calls
         self.setPixmap(QtGui.QPixmap(pixmap))
         self.setGeometry(x, y, width, height)
         self.connecting()

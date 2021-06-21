@@ -7,17 +7,20 @@ class SearchLine(QtWidgets.QLabel):
 
     def __init__(self, parent):
         super(SearchLine, self).__init__(parent=parent)
+        # params
         self.parent = parent
         self.width, self.height = 950, 20
         self.x, self.y = 93, 30
-        self.setGeometry(self.x, self.y, self.width, self.height)
-        self.setStyleSheet("QLabel{border-radius: 3px; background-color: white;}")
+        self.searchSite = False
+        # items
         self.line_edit = SearchLineEdit(self)
         self.button_search = PushedLabel(self, 'resources//images//magnifer.png', 0, 0, 20, 20)
         self.line_edit_title = LineEditTitle(self)
+        # calls
         self.line_edit_title.setGeometry(self.width/2-((self.width/7)/2), 0, self.width/7, self.height)
+        self.setGeometry(self.x, self.y, self.width, self.height)
+        self.setStyleSheet("QLabel{border-radius: 3px; background-color: white;}")
         # self.edit_title.setStyleSheet("QLabel{background-color: black;}")
-        self.searchSite = False
 
         self.connecting()
 

@@ -8,12 +8,15 @@ class PageScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent, url, tab):
         super(PageScene, self).__init__()
+        # params
         self.parent = parent
         self.tab = tab
         self.width, self.height = parent.width-2, parent.height-2
+        # items
         self.engine = ViewEnginePage(self)
-        self.engine.load(QtCore.QUrl(url))
         self.page = self.engine.page()
+        # calls
+        self.engine.load(QtCore.QUrl(url))
         self.setSceneRect(0, 54, self.width, self.height)
         self.addWidget(self.engine)
         self.connecting()
