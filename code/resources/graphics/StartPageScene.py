@@ -43,6 +43,7 @@ class SceneMainWidget(QtWidgets.QWidget):
         self.bookmark_lst = []
 
         self.button_addBookmark = PushedLabel(self, 'resources//images//button_add_bookmark.png', self.width-80-25, 285, 25, 25)
+        self.button_openSettings = PushedLabel(self, 'resources//images//button_settings.png', self.width-80-25-25, 285, 25, 25)
         self.edit_addBookmark = BookmarkEdit(self)
         self.widget_layout = QtWidgets.QWidget(self)
         self.widget_layout.layout = QtWidgets.QGridLayout()
@@ -113,6 +114,7 @@ class SceneMainWidget(QtWidgets.QWidget):
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.widget_layout.setGeometry(80, 25, self.width-80-80, 260)
         self.button_addBookmark.setGeometry(self.width-80-25, 285, 25, 25)
+        self.button_openSettings.setGeometry(self.width-80-25-25, 285, 25, 25)
 
 
 class BookmarkLabel(QtWidgets.QLabel):
@@ -129,18 +131,21 @@ class BookmarkLabel(QtWidgets.QLabel):
         self.layout = QtWidgets.QGridLayout()
         self.layout.title_layout = QtWidgets.QGridLayout()
         self.layout.button_layout = QtWidgets.QGridLayout()
+        self.layout.empty_layout = QtWidgets.QGridLayout()
         self.title = QtWidgets.QLabel(self)
-        self.button_close = PushedLabel(self, "resources//images//button_tab_close_black.png", 15, 5, 20, 20)
+        self.button_close = PushedLabel(self, "", 15, 5, 20, 20)
 
         self.title.setText(self.url)
         self.layout.title_layout.addWidget(self.title)
         self.layout.title_layout.setAlignment(QtCore.Qt.AlignCenter)
         self.layout.button_layout.addWidget(self.button_close)
-        self.layout.button_layout.setAlignment(QtCore.Qt.AlignLeft)
-        self.layout.addLayout(self.layout.title_layout, 1, 1)
-        self.layout.addLayout(self.layout.button_layout, 1, 2)
+        self.layout.button_layout.setAlignment(QtCore.Qt.AlignBottom)
+        self.layout.empty_layout.addWidget(QtWidgets.QLabel())
+        self.layout.addLayout(self.layout.title_layout, 2, 1)
+        self.layout.addLayout(self.layout.button_layout, 1, 3)
+        self.layout.addLayout(self.layout.empty_layout, 3, 2)
 
-        self.button_close.setVisible(False)
+        # self.button_close.setVisible(False)
         self.setGeometry(0,0,1,1)
         self.setLayout(self.layout)
         self.setAttribute(QtCore.Qt.WA_Hover)
@@ -158,16 +163,16 @@ class BookmarkLabel(QtWidgets.QLabel):
 
     def mousePressEvent(self, event):
         self.parent.parent.panel.addTab(self.url)
-        self.parent.parent.panel.closeStartPage()
+        self.parent.parent.panel.closeStartPage(False)
 
     def enterEvent(self, event):
         self.setStyleSheet("QLabel{" + self.tab_theme_unselected_light + "}")
-        self.button_close.setVisible(True)
+        self.button_close.setPixmap(QtGui.QPixmap("resources//images//button_tab_close_black.png"))
         # self.title.setStyleSheet("QLabel{" + self.tab_theme_unselected_light + "}")
 
     def leaveEvent(self, event):
         self.setStyleSheet("QLabel{" + self.tab_theme_unselected + "}")
-        self.button_close.setVisible(False)
+        self.button_close.setPixmap(QtGui.QPixmap(''))
         # self.title.setStyleSheet("QLabel{" + self.tab_theme_unselected + "}")
 
 

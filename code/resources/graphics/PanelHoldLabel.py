@@ -69,7 +69,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.edit_searchLine.line_edit_title.setVisible(True)
         self.edit_searchLine.line_edit.setText('')
         self.edit_searchLine.line_edit.setPlaceholderText("")
-        # self.closeStartPage() # !!!!!!!!!!!! recursion on openTab
+        self.closeStartPage(True)
         self.refresh()
         tab.raise_()
 
@@ -110,7 +110,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
 
     def setStartPage(self):
         if self.is_start_page:
-            self.closeStartPage()
+            self.closeStartPage(False)
         else:
             self.openStartPage()
 
@@ -124,19 +124,23 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.edit_searchLine.line_edit_title.setText("")
         self.refresh()
 
-    def closeStartPage(self):
+    def closeStartPage(self, from_tab):
         self.button_setStartPage.setPixmap(QtGui.QPixmap('resources//images//button_open_start_page.png'))
         self.button_setStartPage.setStyleSheet("QLabel{}")
         self.is_start_page = False
-        try:
-            self.openTab(self.tab_stack[-1])
-        except:
-            # self.parent.parent.parent.close()
+        if from_tab:
             pass
+        else:
+            try:
+                self.openTab(self.tab_stack[-1])
+            except:
+                # self.parent.parent.parent.close()
+                pass
 
     # helper functions
 
     def refresh(self):
+        print('refreshed')
         pos_x, pos_y = 0, 0
         suma = 0
         width = 140
