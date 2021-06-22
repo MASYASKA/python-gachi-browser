@@ -234,4 +234,5 @@ class PanelHoldLabel(QtWidgets.QLabel):
         self.tab_theme_unselected_light = tab_theme_unselected_light
         self.edit_searchLine.line_edit.setTheme(self)
         self.start_page.widget.setTheme(self)
+        self.settings_page.widget.setTheme(self)
         self.refresh()
