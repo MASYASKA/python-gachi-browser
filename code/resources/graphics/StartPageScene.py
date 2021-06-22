@@ -108,6 +108,7 @@ class SceneMainWidget(QtWidgets.QWidget):
     def connecting(self):
         self.parent.transformed.connect(self.transform)
         self.button_addBookmark.clicked.connect(self.edit_addBookmark.setBookmarkEdit)
+        self.button_openSettings.clicked.connect(self.parent.panel.openSettingsPage)
 
     def transform(self):
         self.width, self.height = self.parent.width, self.parent.height

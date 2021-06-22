@@ -6,6 +6,7 @@ from PanelTab import *
 from PageScene import *
 from SearchLineEdit import *
 from StartPageScene import *
+from SettingsScene import *
 
 class PanelHoldLabel(QtWidgets.QLabel):
 
@@ -31,6 +32,7 @@ class PanelHoldLabel(QtWidgets.QLabel):
         # items
         self.view_current_page = ViewMainPage(parent)
         self.start_page = StartPageScene(self.view_current_page, self)
+        self.settings_page = SettingsScene(self.view_current_page, self)
         self.button_setStartPage = PushedLabel(self, 'resources//images//button_open_start_page.png', 0, 0, 25, 25)
         self.edit_searchLine = SearchLine(self)
         # calls
@@ -136,6 +138,11 @@ class PanelHoldLabel(QtWidgets.QLabel):
             except:
                 # self.parent.parent.parent.close()
                 pass
+
+    # settings page
+
+    def openSettingsPage(self):
+        self.view_current_page.setScene(self.settings_page)
 
     # helper functions
 

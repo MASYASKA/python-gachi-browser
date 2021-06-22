@@ -32,6 +32,9 @@ class PageScene(QtWidgets.QGraphicsScene):
     def action_page_reload(self):
         self.changed.emit()
 
+    def addUrlToHistory(self):
+        self.parent.parent.ui.label_panel.settings_page.widget.history.addUrl(self.engine.page().title(), self.engine.page().url())
+
 
     # required funcions
 
@@ -39,6 +42,7 @@ class PageScene(QtWidgets.QGraphicsScene):
         self.parent.transformed.connect(self.transform)
         self.engine.page().loadFinished.connect(self.tab.setPageName)
         self.engine.page().loadFinished.connect(self.parent.parent.ui.label_panel.edit_searchLine.line_edit.setEditTitle)
+        self.engine.page().loadFinished.connect(self.addUrlToHistory)
 
     def transform(self):
         print('PageScene here!')
