@@ -41,13 +41,13 @@ class SceneMainWidget(QtWidgets.QWidget):
         self.x, self.y, self.width, self.height = 0, 0, parent.width, parent.height
         self.line, self.column = 0, 0
         self.bookmark_lst = []
-
+        # items
         self.button_addBookmark = PushedLabel(self, 'resources//images//button_add_bookmark.png', self.width-80-25, 285, 25, 25)
         self.button_openSettings = PushedLabel(self, 'resources//images//button_settings.png', self.width-80-25-25, 285, 25, 25)
         self.edit_addBookmark = BookmarkEdit(self)
         self.widget_layout = QtWidgets.QWidget(self)
         self.widget_layout.layout = QtWidgets.QGridLayout()
-
+        # calls
         self.widget_layout.setGeometry(80, 25, self.width-80-80, 260)
         self.widget_layout.layout.setVerticalSpacing(40)
         self.widget_layout.layout.setHorizontalSpacing(40)

@@ -19,14 +19,16 @@ class MenuLabel(QtWidgets.QLabel):
         self.button_purpleTheme = PopupMenuLabel(self, 'purple theme')
         self.button_violetTheme = PopupMenuLabel(self, 'violet theme')
         self.button_cementTheme = PopupMenuLabel(self, 'cement theme')
+        self.button_openSettings = PopupMenuLabel(self, 'Settings')
         # calls
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.setStyleSheet(r"QLabel{ background-color : white;}")
         self.setVisible(False)
-        self.addButton(self.button_greenTheme)
-        self.addButton(self.button_purpleTheme)
-        self.addButton(self.button_violetTheme)
-        self.addButton(self.button_cementTheme)
+        # self.addButton(self.button_greenTheme)
+        # self.addButton(self.button_purpleTheme)
+        # self.addButton(self.button_violetTheme)
+        # self.addButton(self.button_cementTheme)
+        self.addButton(self.button_openSettings)
 
         self.connecting()
 
@@ -85,6 +87,7 @@ class MenuLabel(QtWidgets.QLabel):
         self.button_purpleTheme.clicked.connect(self.setPurpleTheme)
         self.button_violetTheme.clicked.connect(self.setVioletTheme)
         self.button_cementTheme.clicked.connect(self.setCementTheme)
+        self.button_openSettings.clicked.connect(self.parent.ui.label_panel.openSettingsPage)
 
 
 
