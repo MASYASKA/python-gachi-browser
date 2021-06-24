@@ -39,20 +39,25 @@ class SceneMainWidget(QtWidgets.QWidget):
         # items
         self.history_title = QtWidgets.QLabel(self)
         self.themes_title = QtWidgets.QLabel(self)
+        self.performance_title = QtWidgets.QLabel(self)
         font = self.history_title.font()
         self.history = HistoryWidget(self, 100, 65, 400, 400)
         self.themes = ThemesWidget(self)
+        self.performance = PerformanceWidget(self)
         # calls
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.themes.setGeometry(self.width-140, 65, 80, self.themes.height)
         self.themes_title.setGeometry(self.width-140, 40, 80, 20)
         self.history_title.setGeometry(100, 20, 300, 35)
+        self.performance_title.setGeometry(self.parent.width-400, 45, 114, 20)
         self.history_title.setText("History")
         self.themes_title.setText("Themes")
+        self.performance_title.setText("Performance")
         font.setPixelSize(36)
         self.history_title.setFont(font)
         font.setPixelSize(20)
         self.themes_title.setFont(font)
+        self.performance_title.setFont(font)
 
         self.connecting()
 
@@ -69,6 +74,7 @@ class SceneMainWidget(QtWidgets.QWidget):
         self.width, self.height = self.parent.width, self.parent.height
         self.setGeometry(self.x, self.y, self.width, self.height)
         self.themes_title.setGeometry(self.width-140, 40, 80, 20)
+        self.performance_title.setGeometry(self.parent.width-400, 45, 114, 20)
         self.transformed.emit()
 
 
@@ -116,13 +122,52 @@ class BoxWidget(QtWidgets.QWidget):
     def __init__(self):
         super(BoxWidget, self).__init__()
 
+class RadioWidget(QtWidgets.QWidget):
 
-class ThemesWidget(QtWidgets.QWidget):
+    def __init__(self, parent):
+        super(RadioWidget, self).__init__(parent=parent)
+        # params
+        self.parent = parent
+        self.x, self.y, self.width, self.height = 0, 0, 0, 0
+        self.cx, self.cy, self.cwidth, self.cheight = 0, 0, 0, 0
+
+    def addRadio(self, radio):
+        radio.setGeometry(self.cx, self.cy, self.cwidth, self.cheight)
+        self.cy += self.cheight
+        self.height = self.cy
+        self.setGeometry(self.x, self.y, self.width, self.height)
+
+
+class PerformanceWidget(RadioWidget):
+
+    def __init__(self, parent):
+        super(PerformanceWidget, self).__init__(parent=parent)
+        # params
+        self.x, self.y, self.width, self.height = self.parent.width-400, 65, 80, 0
+        self.cx, self.cy, self.cwidth, self.cheight = 0, 0, 80, 20
+        # items
+        self.radio_boostOn = QtWidgets.QRadioButton(self)
+        self.radio_boostOff = QtWidgets.QRadioButton(self)
+        # calls
+        self.radio_boostOn.setText('On')
+        self.radio_boostOff.setText('Off')
+        self.addRadio(self.radio_boostOn)
+        self.addRadio(self.radio_boostOff)
+
+        self.connecting()
+
+    def connecting(self):
+        self.parent.transformed.connect(self.transform)
+
+    def transform(self):
+        self.setGeometry(self.parent.width-400, 65, 80, self.height)
+
+
+class ThemesWidget(RadioWidget):
 
     def __init__(self, parent):
         super(ThemesWidget, self).__init__(parent=parent)
         # params
-        self.parent = parent
         self.x, self.y, self.width, self.height = self.parent.width-140, 65, 80, 0
         self.cx, self.cy, self.cwidth, self.cheight = 0, 0, 80, 20
         # items
@@ -141,13 +186,6 @@ class ThemesWidget(QtWidgets.QWidget):
         self.addRadio(self.radio_cementTheme)
 
         self.connecting()
-
-    def addRadio(self, radio):
-        radio.setGeometry(self.cx, self.cy, self.cwidth, self.cheight)
-        self.cy += self.cheight
-        self.height = self.cy
-        print(self.height)
-        self.setGeometry(self.x, self.y, self.width, self.height)
 
     # themes
 
