@@ -1,19 +1,19 @@
 from PyQt5 import QtWidgets, QtGui, QtCore, QtWebEngineWidgets, QtTest
 import sys
-with open('settings.txt', 'r') as file:
-    optimized = file.read()
-    if optimized == 'True': 
-        sys.path += ['E://0//git//python-gachi-browser//code//resources//graphics//optimized']
-        from PanelHoldLabelOptimized import *
-        from PanelTabOptimized import *
-        from PushedLabelOptimized import *
-        from MenuLabelOptimized import *
-    else:
-        sys.path += ['E://0//git//python-gachi-browser//code//resources//graphics']
-        from PanelHoldLabel import *
-        from PanelTab import *
-        from PushedLabel import *
-        from MenuLabel import *
+import settings_parser
+settings = settings_parser.Parser('E://0//git//python-gachi-browser//code//settings.txt')
+if settings.optimized == 'True': 
+    sys.path += ['E://0//git//python-gachi-browser//code//resources//graphics//optimized']
+    from PanelHoldLabelOptimized import *
+    from PanelTabOptimized import *
+    from PushedLabelOptimized import *
+    from MenuLabelOptimized import *
+else:
+    sys.path += ['E://0//git//python-gachi-browser//code//resources//graphics']
+    from PanelHoldLabel import *
+    from PanelTab import *
+    from PushedLabel import *
+    from MenuLabel import *
 
 
 class Ui_Main:

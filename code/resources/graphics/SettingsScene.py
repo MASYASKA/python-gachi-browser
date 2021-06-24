@@ -1,5 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from PushedLabel import *
+import settings_parser
+settings = settings_parser.Parser('E://0//git//python-gachi-browser//code//settings.txt')
 
 class SettingsScene(QtWidgets.QGraphicsScene):
 
@@ -156,8 +158,18 @@ class PerformanceWidget(RadioWidget):
 
         self.connecting()
 
+    def boost_on(self):
+        settings.optimized = 'True'
+
+    def boost_off(self):
+        setText.optimized = 'False'
+
+    # required functions
+
     def connecting(self):
         self.parent.transformed.connect(self.transform)
+        self.radio_boostOn.clicked.connect(self.boost_on)
+        self.radio_boostOff.clicked.connect(self.boost_off)
 
     def transform(self):
         self.setGeometry(self.parent.width-400, 65, 80, self.height)
