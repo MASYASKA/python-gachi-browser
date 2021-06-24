@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
 from PushedLabel import *
 import settings_parser
+import os
+import sys
 settings = settings_parser.Parser('E://0//git//python-gachi-browser//code//settings.txt')
 
 class SettingsScene(QtWidgets.QGraphicsScene):
@@ -150,19 +152,37 @@ class PerformanceWidget(RadioWidget):
         # items
         self.radio_boostOn = QtWidgets.QRadioButton(self)
         self.radio_boostOff = QtWidgets.QRadioButton(self)
+        self.message = QtWidgets.QMessageBox()
         # calls
-        self.radio_boostOn.setText('On')
-        self.radio_boostOff.setText('Off')
+        self.radio_boostOn.setText('performance')
+        self.radio_boostOff.setText('functionality')
         self.addRadio(self.radio_boostOn)
         self.addRadio(self.radio_boostOff)
+        self.message.setText('Browser will restart')
+        self.message.setInformativeText('Continue?')
+        self.message.addButton(QtWidgets.QWidget().tr('Yes'), self.message.AcceptRole)
+        self.message.addButton(QtWidgets.QWidget().tr('No'), self.message.RejectRole)
+        if settings.optimized == 'True':
+            self.radio_boostOn.setChecked(True)
+        else:
+            self.radio_boostOff.setChecked(True)
 
         self.connecting()
 
     def boost_on(self):
-        settings.optimized = 'True'
+        settings.dic['optimized'] = 'True'
+        settings.fill()
+        self.message.exec()
 
     def boost_off(self):
-        setText.optimized = 'False'
+        settings.dic['optimized'] = 'False'
+        settings.fill()
+        self.message.exec()
+
+    # restart
+
+    def restart_browser(self):
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
     # required functions
 
@@ -170,6 +190,7 @@ class PerformanceWidget(RadioWidget):
         self.parent.transformed.connect(self.transform)
         self.radio_boostOn.clicked.connect(self.boost_on)
         self.radio_boostOff.clicked.connect(self.boost_off)
+        self.message.accepted.connect(self.restart_browser)
 
     def transform(self):
         self.setGeometry(self.parent.width-400, 65, 80, self.height)
@@ -196,6 +217,7 @@ class ThemesWidget(RadioWidget):
         self.addRadio(self.radio_purpleTheme)
         self.addRadio(self.radio_violetTheme)
         self.addRadio(self.radio_cementTheme)
+        self.radio_cementTheme.setChecked(True)
 
         self.connecting()
 

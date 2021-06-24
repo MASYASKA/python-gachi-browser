@@ -19,7 +19,7 @@ class Parser:
     def fill(self):
         if self.dic:
             file = open(self.direct, 'w')
-            for key in self.dict.keys():
-                file.write(f'{key}:{self.dict[key]}')
+            for key in self.dic.keys():
+                file.write(f'{key}:{self.dic[key]}')
         else:
             raise ZeroDivisionError('The dictionary is empty.')
